@@ -1,0 +1,12 @@
+.idea
+*.iml
+nbproject
+.buildpath
+.project
+.settings
+*.sublime-project
+*.sublime-workspace
+.vscode
+.DS_Store
+.env
+

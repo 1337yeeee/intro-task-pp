@@ -1,0 +1,10 @@
+/my-yii2-app
+|-- /application
+|   |-- (здесь будет исходный код Yii2)
+|-- /docker
+|   |-- php
+|   |   |-- Dockerfile
+|   |-- /conf
+|       |-- /nginx
+|           |-- site.conf
+|-- docker-compose.yml
