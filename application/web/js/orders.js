@@ -25,7 +25,7 @@ $(document).ready(function() {
             $('#orders-table tbody').empty();
 
             // Перебираем массив данных и добавляем строки в таблицу
-            $.each(data, function(index, order) {
+            $.each(data.orders, function(index, order) {
                 orderDate = parseDate(order.created_at)
                 $('#orders-table tbody').append(`
                     <tr>
