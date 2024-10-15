@@ -25,7 +25,9 @@ RUN chown -R www-data:www-data /var/www/html \
 # Устанавливаем зависимости через Composer
 RUN composer install --prefer-dist --no-dev --optimize-autoloader
 
+RUN apt-get install -y wait-for-it
+
 # Экспонируем порт
 EXPOSE 9000
 
-CMD ["php-fpm"]
+CMD ["sh", "-c", "wait-for-it yii2-mysql:3306 -- php yii migrate --interactive=0 && php-fpm"]

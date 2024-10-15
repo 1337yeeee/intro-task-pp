@@ -15,18 +15,18 @@ class m241015_121833_seed_orders extends Migration
     {
         $filePath = __DIR__ . '/sql/orders';
 
-        $batchSize = 1000; // Вставляем по 1000 записей за раз
-
         // Используем транзакцию для повышения производительности
         $this->db->createCommand('SET foreign_key_checks = 1;')->execute(); // Отключаем проверки внешних ключей
         $transaction = $this->db->beginTransaction();
         if(is_null($transaction)) throw new \yii\db\Exception('Transaction has not been started.');
 
-        $i = 0;
-        while(is_dir($dirPath = $filePath."_{$i}.sql")) {
+        $i = 1;
+        while(is_file($dirPath = $filePath."_{$i}.sql")) {
+            echo "\n\n\n!_+!_!+_!+_!+_!+!_+!_!+_+!_+!_+!_+!\n".$i . "\n\n\n\n";
             $i++;
             $sql = file_get_contents($dirPath);
             $this->execute($sql);
+            echo $i . "\n";
         }
 
         $transaction->commit();
@@ -37,9 +37,7 @@ class m241015_121833_seed_orders extends Migration
      */
     public function safeDown()
     {
-        echo "m241015_121833_seed_orders cannot be reverted.\n";
-
-        return false;
+        $this->truncateTable('orders');
     }
 
     /*
