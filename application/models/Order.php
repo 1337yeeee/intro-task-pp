@@ -22,12 +22,12 @@ class Order extends ActiveRecord
         return $this->hasOne(Service::class, ['id' => 'service_id']);
     }
 
-    public static function getRecentOrders($limit = 100, $status = null, $service_id = null, $mode = null, int $page=1): array
+    public static function getRecentOrders(int $limit = 100, int $page = 1, $status = null, $service_id = null, $mode = null, $searchQuery = null): array
     {
         $offset = ($page - 1) * $limit;
 
         $query = self::find()
-            ->with(['user', 'service'])
+            ->joinWith(['user', 'service']) // Добавляем join для таблицы user
             ->orderBy(['id' => SORT_DESC])
             ->limit($limit)
             ->offset($offset);
@@ -44,8 +44,19 @@ class Order extends ActiveRecord
             $query->andWhere(['mode' => $mode]);
         }
 
+        if ($searchQuery !== null) {
+            $query->andWhere([
+                'or',
+                ['like', 'orders.id', $searchQuery],
+                ['like', 'users.first_name', $searchQuery], // Теперь это работает
+                ['like', 'users.last_name', $searchQuery],  // Это тоже работает
+                ['like', 'orders.link', $searchQuery],
+            ]);
+        }
+
         return $query->asArray()->all();
     }
+
 
     public static function getCount($status = null, $service_id = null, $mode = null)
     {

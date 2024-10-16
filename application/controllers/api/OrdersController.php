@@ -5,21 +5,23 @@ namespace app\controllers\api;
 use app\models\Order;
 use yii\rest\Controller;
 use Yii;
+use yii\web\Response;
 
 class OrdersController extends Controller
 {
     /**
      * Метод для получения статических заказов.
      *
-     * @return \yii\web\Response
+     * @return Response
      */
-    public function actionIndex()
+    public function actionIndex(): Response
     {
         $perPage = \Yii::$app->request->get('limit', 100); // Параметр лимита, по умолчанию 100
         $status = \Yii::$app->request->get('status'); // Параметр статуса
         $service_id = \Yii::$app->request->get('service_id'); // Параметр service_id
         $mode = \Yii::$app->request->get('mode'); // Параметр mode
         $page = \Yii::$app->request->get('page', 1); // Параметр страницы
+        $searchQuery = \Yii::$app->request->get('q'); // Параметр страницы
 
         $statuses = [
             'Pending' => 0,
@@ -30,7 +32,7 @@ class OrdersController extends Controller
         ];
         $status = $statuses[$status] ?? null;
 
-        $orders = Order::getRecentOrders($perPage, $status, $service_id, $mode, $page);
+        $orders = Order::getRecentOrders($perPage, $page, $status, $service_id, $mode, $searchQuery);
 
         $totalCount = Order::getCount($status, $service_id, $mode);
 
