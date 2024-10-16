@@ -22,59 +22,41 @@ class Order extends ActiveRecord
         return $this->hasOne(Service::class, ['id' => 'service_id']);
     }
 
-    public static function getRecentOrders(int $limit = 100, int $page = 1, $status = null, $service_id = null, $mode = null, $searchQuery = null): array
+     public static function getRecentOrders(int $limit = 100, int $page = 1, ?OrderFilter $filter=null): array
     {
         $offset = ($page - 1) * $limit;
 
         $query = self::find()
-            ->joinWith(['user', 'service']) // Добавляем join для таблицы user
+            ->joinWith(['service','user'])
             ->orderBy(['id' => SORT_DESC])
             ->limit($limit)
             ->offset($offset);
 
-        if ($status !== null) {
-            $query->andWhere(['status' => $status]);
-        }
-
-        if ($service_id !== null) {
-            $query->andWhere(['service_id' => $service_id]);
-        }
-
-        if ($mode !== null) {
-            $query->andWhere(['mode' => $mode]);
-        }
-
-        if ($searchQuery !== null) {
-            $query->andWhere([
-                'or',
-                ['like', 'orders.id', $searchQuery],
-                ['like', 'users.first_name', $searchQuery], // Теперь это работает
-                ['like', 'users.last_name', $searchQuery],  // Это тоже работает
-                ['like', 'orders.link', $searchQuery],
-            ]);
-        }
+        if($filter!==null) $filter->applyFilters($query);
 
         return $query->asArray()->all();
     }
 
 
-    public static function getCount($status = null, $service_id = null, $mode = null)
+    public static function getCount(?OrderFilter $filter=null)
     {
         $query = self::find();
 
-        if ($status !== null) {
-            $query->andWhere(['status' => $status]);
-        }
-
-        if ($service_id !== null) {
-            $query->andWhere(['service_id' => $service_id]);
-        }
-
-        if ($mode !== null) {
-            $query->andWhere(['mode' => $mode]);
-        }
+        if($filter!==null) $filter->applyFilters($query);
 
         return $query->count();
+    }
+
+    public static function getServicesOfOrders(?OrderFilter $filter=null)
+    {
+        $query = self::find()
+            ->joinWith('service')
+            ->select(['services.name', 'services.id', 'COUNT(orders.id) as order_count'])
+            ->groupBy(['services.name', 'services.id']);
+
+        $filter->applyFilters($query);
+
+        return $query->asArray()->all();
     }
 
 }

@@ -41,26 +41,26 @@
     </div>
 </nav>
 <div class="container-fluid">
-    <ul class="nav nav-tabs p-b">
-        <li class="active"><a href="#">All orders</a></li>
-        <li><a href="#">Pending</a></li>
-        <li><a href="#">In progress</a></li>
-        <li><a href="#">Completed</a></li>
-        <li><a href="#">Canceled</a></li>
-        <li><a href="#">Error</a></li>
+    <ul class="nav nav-tabs p-b" id="nav-tabs">
+        <li data-type="status" data-status="" class="active"><a href="#">All orders</a></li>
+        <li data-type="status" data-status="Pending"><a href="#">Pending</a></li>
+        <li data-type="status" data-status="In progress"><a href="#">In progress</a></li>
+        <li data-type="status" data-status="Completed"><a href="#">Completed</a></li>
+        <li data-type="status" data-status="Canceled"><a href="#">Canceled</a></li>
+        <li data-type="status" data-status="Error"><a href="#">Error</a></li>
         <li class="pull-right custom-search">
-            <form class="form-inline" action="/admin/orders" method="get">
+            <form class="form-inline" action="/orders" method="get">
                 <div class="input-group">
-                    <input type="text" name="search" class="form-control" value="" placeholder="Search orders">
+                    <input type="text" name="search" class="form-control" value="" placeholder="Search orders" id="search-input">
                     <span class="input-group-btn search-select-wrap">
 
-            <select class="form-control search-select" name="search-type">
-              <option value="1" selected="">Order ID</option>
-              <option value="2">Link</option>
-              <option value="3">Username</option>
-            </select>
-            <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-            </span>
+                    <select class="form-control search-select" name="search-type" id="search-type">
+                      <option value="1" selected="">Order ID</option>
+                      <option value="2">Link</option>
+                      <option value="3">Username</option>
+                    </select>
+                    <button type="submit" class="btn btn-default" id="search-button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                    </span>
                 </div>
             </form>
         </li>
@@ -78,15 +78,7 @@
                         Service
                         <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li class="active"><a href="">All (894931)</a></li>
-                        <li><a href=""><span class="label-id">214</span>  Real Views</a></li>
-                        <li><a href=""><span class="label-id">215</span> Page Likes</a></li>
-                        <li><a href=""><span class="label-id">10</span> Page Likes</a></li>
-                        <li><a href=""><span class="label-id">217</span> Page Likes</a></li>
-                        <li><a href=""><span class="label-id">221</span> Followers</a></li>
-                        <li><a href=""><span class="label-id">224</span> Groups Join</a></li>
-                        <li><a href=""><span class="label-id">230</span> Website Likes</a></li>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="services-data">
                     </ul>
                 </div>
             </th>
@@ -97,10 +89,10 @@
                         Mode
                         <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li class="active"><a href="">All</a></li>
-                        <li><a href="">Manual</a></li>
-                        <li><a href="">Auto</a></li>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="mode-list">
+                        <li data-mode="" class="active"><a href="">All</a></li>
+                        <li data-mode="0"><a href="">Manual</a></li>
+                        <li data-mode="1"><a href="">Auto</a></li>
                     </ul>
                 </div>
             </th>
@@ -108,61 +100,13 @@
         </tr>
         </thead>
         <tbody id="orders-table">
-        <tr>
-            <td>558931</td>
-            <td>waliullah</td>
-            <td class="link">/p/BMRSv4FDevy/</td>
-            <td>3000</td>
-            <td class="service">
-                <span class="label-id">213</span>Likes
-            </td>
-            <td>Pending</td>
-            <td>Manual</td>
-            <td><span class="nowrap">2016-01-27</span><span class="nowrap">15:13:52</span></td>
-        </tr>
-        <tr>
-            <td>55892</td>
-            <td>spiderfady</td>
-            <td class="link">/followers</td>
-            <td>1800</td>
-            <td class="service">
-                <span class="label-id">3</span> Real Views
-            </td>
-            <td>Canceled</td>
-            <td>Auto</td>
-            <td><span class="nowrap">2016-01-27</span><span class="nowrap">15:13:52</span></td>
-        </tr>
-        <tr>
-            <td>55891</td>
-            <td>spiderfady</td>
-            <td class="link">/com.usk</td>
-            <td>1800</td>
-            <td class="service">
-                <span class="label-id">15</span> Views
-            </td>
-            <td>Canceled</td>
-            <td>Auto</td>
-            <td><span class="nowrap">2016-01-27</span><span class="nowrap">15:13:52</span></td>
-        </tr>
-        <tr>
-            <td>52137</td>
-            <td>gulaka</td>
-            <td class="link">/p/BMD5RzxgRke/</td>
-            <td>1800</td>
-            <td class="service">
-                <span class="label-id">5</span> Comment
-            </td>
-            <td>Error</td>
-            <td>Auto</td>
-            <td><span class="nowrap">2016-01-27</span><span class="nowrap">15:13:52</span></td>
-        </tr>
         </tbody>
     </table>
     <div class="row">
         <div class="col-sm-8">
 
             <nav>
-                <ul class="pagination">
+                <ul class="pagination" id="pagination">
                     <li class="disabled"><a href="" aria-label="Previous">&laquo;</a></li>
                     <li class="active"><a href="">1</a></li>
                     <li><a href="">2</a></li>
@@ -179,14 +123,13 @@
             </nav>
 
         </div>
-        <div class="col-sm-4 pagination-counters">
-            1 to 100 of 3263
+        <div class="col-sm-4 pagination-counters" id="pagination-counters">
         </div>
 
     </div>
 </div>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/orders.js"></script>
+<script src="js/orders.js?<?php echo random_int(0,2**15)?>"></script>
 </body>
 <html>

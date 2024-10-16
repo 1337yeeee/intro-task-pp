@@ -46,7 +46,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                ['class' => 'yii\rest\UrlRule', 'controller' => ['api/orders']],
+                ['class' => 'yii\rest\UrlRule', 'controller' => ['api/orders', 'api/services']],
                 'orders' => 'orders/index',
             ],
         ],

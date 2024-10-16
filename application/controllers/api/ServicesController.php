@@ -2,29 +2,18 @@
 
 namespace app\controllers\api;
 
-use app\models\Order;
 use app\models\OrderFilter;
-use yii\data\Pagination;
 use yii\rest\Controller;
-use Yii;
-use yii\web\Response;
-use yii\widgets\LinkPager;
+use app\models\Service;
+use app\models\Order;
 
-class OrdersController extends Controller
+class ServicesController extends Controller
 {
-    /**
-     * Метод для получения статических заказов.
-     *
-     * @return Response
-     * @throws \Throwable
-     */
-    public function actionIndex(): Response
+    public function actionIndex()
     {
-        $perPage = \Yii::$app->request->get('limit', 100); // Параметр лимита, по умолчанию 100
         $status = \Yii::$app->request->get('status'); // Параметр статуса
         $service_id = \Yii::$app->request->get('service_id'); // Параметр service_id
         $mode = \Yii::$app->request->get('mode'); // Параметр mode
-        $page = \Yii::$app->request->get('page', 1); // Параметр страницы
         $searchQuery = \Yii::$app->request->get('search'); // Параметр страницы
         $searchType = \Yii::$app->request->get('search-type', 1);
 
@@ -48,34 +37,22 @@ class OrdersController extends Controller
         ];
 
         $filters = [
-            'perPage' => $perPage,
             'status' => $statusesNameToNum[$status],
             'service_id' => $service_id,
             'mode' => $mode,
-            'page' => $page,
             'searchQuery' => $searchQuery,
+            'searchType' => $searchType,
             'searchColumn' => $searchColumn,
         ];
+        $filter = new OrderFilter($filters);
 
-        $ordersFilter = new OrderFilter($filters);
-        $orders = Order::getRecentOrders($perPage, $page, $ordersFilter);
-        $totalCount = Order::getCount($ordersFilter);
+        $services = Order::getServicesOfOrders($filter);
 
-        $pagination = LinkPager::widget([
-            'pagination' => new Pagination([
-                'totalCount' => $totalCount,
-                'pageSize' => $perPage,
-                'page' => $page - 1,
-                'route' => 'orders/index'
-            ]),
-        ]);
+        $totalCount = Order::getCount($filter);
 
         return $this->asJson([
-            'total_count' => $totalCount,
-            'per_page' => $perPage,
-            'page' => $page,
-            'pagination' => $pagination,
-            'orders' => $orders,
+            'totalCount' => $totalCount,
+            'services' => $services,
         ]);
     }
 }
