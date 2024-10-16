@@ -49,7 +49,7 @@ class OrdersController extends Controller
 
         $filters = [
             'perPage' => $perPage,
-            'status' => $statusesNameToNum[$status],
+            'status' => $statusesNameToNum[$status]??null,
             'service_id' => $service_id,
             'mode' => $mode,
             'page' => $page,

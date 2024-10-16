@@ -50,7 +50,20 @@ $config = [
                 'orders' => 'orders/index',
             ],
         ],
+        'i18n' => [
+            'translations' => [
+                'app*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                    'fileMap' => [
+                        'app' => 'app.php',
+                        'app/error' => 'error.php',
+                    ],
+                ],
+            ],
+        ],
     ],
+    'language' => $_ENV['APP_LANGUAGE'],
     'params' => $params,
 ];
 

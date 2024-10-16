@@ -37,7 +37,7 @@ class ServicesController extends Controller
         ];
 
         $filters = [
-            'status' => $statusesNameToNum[$status],
+            'status' => $statusesNameToNum[$status]??null,
             'service_id' => $service_id,
             'mode' => $mode,
             'searchQuery' => $searchQuery,

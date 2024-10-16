@@ -8,6 +8,6 @@ class OrdersController extends Controller
 {
     public function actionIndex(): string
     {
-        return $this->render('index'); // Загружаем представление 'index.php'
+        return $this->render('index');
     }
 }

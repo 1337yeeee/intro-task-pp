@@ -1,9 +1,9 @@
 STATUSES = {
-    0: 'Pending',
-    1: 'In progress',
-    2: 'Completed',
-    3: 'Canceled',
-    4: 'Error'
+    0: translations['Pending'],
+    1: translations['In progress'],
+    2: translations['Completed'],
+    3: translations['Canceled'],
+    4: translations['Error'],
 };
 
 STATUSES_N = {
@@ -15,8 +15,8 @@ STATUSES_N = {
 };
 
 MODES = {
-    0: 'Manual',
-    1: 'Auto'
+    0: translations['Manual'],
+    1: translations['Auto'],
 };
 
 $(document).ready(function() {

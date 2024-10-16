@@ -35,29 +35,29 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Orders</a></li>
+                <li class="active"><a href="#"><?= Yii::t('app', 'Orders') ?></a></li>
             </ul>
         </div>
     </div>
 </nav>
 <div class="container-fluid">
     <ul class="nav nav-tabs p-b" id="nav-tabs">
-        <li data-type="status" data-status="" class="active"><a href="#">All orders</a></li>
-        <li data-type="status" data-status="Pending"><a href="#">Pending</a></li>
-        <li data-type="status" data-status="In progress"><a href="#">In progress</a></li>
-        <li data-type="status" data-status="Completed"><a href="#">Completed</a></li>
-        <li data-type="status" data-status="Canceled"><a href="#">Canceled</a></li>
-        <li data-type="status" data-status="Error"><a href="#">Error</a></li>
+        <li data-type="status" data-status="" class="active"><a href="#"><?= Yii::t('app', 'All orders')?></a></li>
+        <li data-type="status" data-status="Pending"><a href="#"><?= Yii::t('app', 'Pending') ?></a></li>
+        <li data-type="status" data-status="In progress"><a href="#"><?= Yii::t('app', 'In progress') ?></a></li>
+        <li data-type="status" data-status="Completed"><a href="#"><?= Yii::t('app', 'Completed') ?></a></li>
+        <li data-type="status" data-status="Canceled"><a href="#"><?= Yii::t('app', 'Canceled') ?></a></li>
+        <li data-type="status" data-status="Error"><a href="#"><?= Yii::t('app', 'Error') ?></a></li>
         <li class="pull-right custom-search">
             <form class="form-inline" action="/orders" method="get">
                 <div class="input-group">
-                    <input type="text" name="search" class="form-control" value="" placeholder="Search orders" id="search-input">
+                    <input type="text" name="search" class="form-control" value="" placeholder="<?= Yii::t('app', 'Search orders') ?>" id="search-input">
                     <span class="input-group-btn search-select-wrap">
 
                     <select class="form-control search-select" name="search-type" id="search-type">
-                      <option value="1" selected="">Order ID</option>
-                      <option value="2">Link</option>
-                      <option value="3">Username</option>
+                      <option value="1" selected=""><?= Yii::t('app', 'Order ID') ?></option>
+                      <option value="2"><?= Yii::t('app', 'Link') ?></option>
+                      <option value="3"><?= Yii::t('app', 'Username') ?></option>
                     </select>
                     <button type="submit" class="btn btn-default" id="search-button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                     </span>
@@ -68,35 +68,35 @@
     <table class="table order-table" id="orders-table">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>User</th>
-            <th>Link</th>
-            <th>Quantity</th>
+            <th><?= Yii::t('app', 'ID') ?></th>
+            <th><?= Yii::t('app', 'User') ?></th>
+            <th><?= Yii::t('app', 'Link') ?></th>
+            <th><?= Yii::t('app', 'Quantity') ?></th>
             <th class="dropdown-th">
                 <div class="dropdown">
                     <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Service
+                        <?= Yii::t('app', 'Service')?>
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="services-data">
                     </ul>
                 </div>
             </th>
-            <th>Status</th>
+            <th><?= Yii::t('app', 'Status') ?></th>
             <th class="dropdown-th">
                 <div class="dropdown">
                     <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Mode
+                        <?= Yii::t('app', 'Mode') ?>
                         <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="mode-list">
-                        <li data-mode="" class="active"><a href="">All</a></li>
-                        <li data-mode="0"><a href="">Manual</a></li>
-                        <li data-mode="1"><a href="">Auto</a></li>
+                        <li data-mode="" class="active"><a href=""><?= Yii::t('app', 'All') ?></a></li>
+                        <li data-mode="0"><a href=""><?= Yii::t('app', 'Manual') ?></a></li>
+                        <li data-mode="1"><a href=""><?= Yii::t('app', 'Auto') ?></a></li>
                     </ul>
                 </div>
             </th>
-            <th>Created</th>
+            <th><?= Yii::t('app', 'Created') ?></th>
         </tr>
         </thead>
         <tbody id="orders-table">
@@ -128,6 +128,18 @@
 
     </div>
 </div>
+
+<script>
+    const translations = {
+        'Pending': '<?= Yii::t('app', 'Pending') ?>',
+        'In progress': '<?= Yii::t('app', 'In progress') ?>',
+        'Completed': '<?= Yii::t('app', 'Completed') ?>',
+        'Canceled': '<?= Yii::t('app', 'Canceled') ?>',
+        'Error': '<?= Yii::t('app', 'Error') ?>',
+        'Manual': '<?= Yii::t('app', 'Manual') ?>',
+        'Auto': '<?= Yii::t('app', 'Auto') ?>'
+    };
+</script>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/orders.js?<?php echo random_int(0,2**15)?>"></script>

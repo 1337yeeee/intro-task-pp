@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'Orders' => 'Orders',
+    'All orders' => 'All orders',
+    'Pending' => 'Pending',
+    'In progress' => 'In progress',
+    'Completed' => 'Completed',
+    'Canceled' => 'Canceled',
+    'Error' => 'Error',
+    'Order ID' => 'Order ID',
+    'Link' => 'Link',
+    'Username' => 'Username',
+    'ID' => 'ID',
+    'User' => 'User',
+    'Quantity' => 'Quantity',
+    'Service' => 'Service',
+    'All' => 'All',
+    'Manual' => 'Manual',
+    'Auto' => 'Auto',
+    'Created' => 'Created',
+    'Search orders' => 'Search orders',
+    'Status' => 'Status',
+    'Mode' => 'Mode',
+];
