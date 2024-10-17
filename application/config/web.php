@@ -48,6 +48,7 @@ $config = [
             'rules' => [
                 ['class' => 'yii\rest\UrlRule', 'controller' => ['api/orders', 'api/services']],
                 'orders' => 'orders/index',
+                'api/orders/export' => 'api/orders-export/csv'
             ],
         ],
         'i18n' => [
