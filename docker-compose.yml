@@ -18,7 +18,7 @@ services:
       - ./docker/conf/nginx/site.conf:/etc/nginx/conf.d/default.conf
       - ./application:/var/www/html
     ports:
-      - "${PORT_1}:80"
+      - "${PORT_HTTP}:80"
     depends_on:
       - php-fpm
     networks:
@@ -33,7 +33,7 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "${PORT_2}:3306"
+      - "${PORT_MYSQL}:3306"
     volumes:
       - dbdata:/var/lib/mysql
     networks:
