@@ -63,7 +63,7 @@ $config = [
             ],
         ],
     ],
-    'language' => $_ENV['APP_LANGUAGE'],
+    'language' => getenv('APP_LANGUAGE'),
     'params' => $params,
 ];
 

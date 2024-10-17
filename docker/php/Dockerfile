@@ -18,6 +18,11 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY ./application /var/www/html
 
+ENV DB_ROOT_PASSWORD ${DB_ROOT_PASSWORD}
+ENV DB_DATABASE ${DB_DATABASE}
+ENV DB_USER ${DB_USER}
+ENV DB_PASSWORD ${DB_PASSWORD}
+
 # Устанавливаем права
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
