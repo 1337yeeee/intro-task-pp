@@ -59,4 +59,31 @@ class Order extends ActiveRecord
         return $query->asArray()->all();
     }
 
+    private static array $modes;
+    public function getMode(): string
+    {
+        $modeValue = $this->getAttribute('mode');
+        if(isset(self::$modes)) return self::$modes[$modeValue]??'';
+        self::$modes = [
+            0 => Yii::t('app', 'Manual'),
+            1 => Yii::t('app', 'Auto'),
+        ];
+        return self::$modes[$modeValue]??'';
+    }
+
+    private static array $statuses;
+    public function getStatus(): string
+    {
+        $statusValue = $this->getAttribute('status');
+        if(isset(self::$statuses)) return self::$statuses[$statusValue]??'';
+        self::$statuses = [
+            0 => Yii::t('app', 'Pending'),
+            1 => Yii::t('app', 'In progress'),
+            2 => Yii::t('app', 'Completed'),
+            3 => Yii::t('app', 'Canceled'),
+            4 => Yii::t('app', 'Error'),
+        ];
+        return self::$statuses[$statusValue]??'';
+    }
+
 }

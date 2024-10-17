@@ -21,7 +21,7 @@ class OrderService
         return $query->asArray()->all();
     }
 
-    public function getRecentOrdersBatch(int $batchSize = 1000, ?OrderFilter $filter = null)
+    public function getRecentOrdersBatch(int $batchSize = 1000, ?OrderFilter $filter = null): \Generator
     {
         $query = Order::find()
             ->joinWith(['service', 'user'])
@@ -45,7 +45,7 @@ class OrderService
         return $query->count();
     }
 
-    public function getServicesOfOrders(?OrderFilter $filter=null)
+    public function getServicesOfOrders(?OrderFilter $filter=null): array
     {
         $query = Order::find()
             ->joinWith('service')

@@ -49,8 +49,8 @@ class OrdersExportController extends Controller
             : '';
 
         // Получаем статус, режим и дату создания
-        $status = $this->getStatus($order->status);
-        $mode = $this->getMode($order->mode);
+        $status = $order->getStatus();
+        $mode = $order->getMode();
         $date = \date('Y-m-d H:i:s', $order->created_at);
 
         return [
@@ -63,31 +63,6 @@ class OrdersExportController extends Controller
             $mode,
             $date,
         ];
-    }
-
-    private static array $modes;
-    private function getMode($mode): string
-    {
-        if(isset(self::$modes)) return self::$modes[$mode]??'';
-        self::$modes = [
-            0 => Yii::t('app', 'Manual'),
-            1 => Yii::t('app', 'Auto'),
-        ];
-        return self::$modes[$mode]??'';
-    }
-
-    private static array $statuses;
-    private function getStatus($status): string
-    {
-        if(isset(self::$statuses)) return self::$statuses[$status]??'';
-        self::$statuses = [
-            0 => Yii::t('app', 'Pending'),
-            1 => Yii::t('app', 'In progress'),
-            2 => Yii::t('app', 'Completed'),
-            3 => Yii::t('app', 'Canceled'),
-            4 => Yii::t('app', 'Error'),
-        ];
-        return self::$statuses[$status]??'';
     }
 
     private function getCsvHeaders(): array
