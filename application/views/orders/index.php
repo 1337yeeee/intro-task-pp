@@ -127,6 +127,15 @@
         </div>
 
     </div>
+    <div class="row">
+        <div class="col-sm-8">
+        </div>
+        <div class="col-sm-4 pagination-counters">
+            <button class="btn btn-th btn-primary" id="export-btn" type="button">
+                <?= Yii::t('app', 'Download') ?>
+            </button>
+        </div>
+    </div>
 </div>
 
 <script>

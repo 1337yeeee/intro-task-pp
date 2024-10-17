@@ -30,17 +30,17 @@ class OrdersController extends Controller
 
         $service = new OrderService();
 
-        $orders = $service->getRecentOrders($page, $perPage, $ordersFilter);
         $totalCount = $service->getCount($ordersFilter);
-
-        $pagination = LinkPager::widget([
-            'pagination' => new Pagination([
-                'totalCount' => $totalCount,
-                'pageSize' => $perPage,
-                'page' => $page - 1,
-                'route' => 'orders/index'
-            ]),
+        $pagination = new Pagination([
+            'totalCount' => $totalCount,
+            'pageSize' => $perPage,
+            'page' => $page - 1,
+            'route' => 'orders/index'
         ]);
+
+        $orders = $service->getRecentOrders($pagination, $ordersFilter);
+
+        $pagination = LinkPager::widget(['pagination' => $pagination]);
 
         return $this->asJson([
             'total_count' => $totalCount,

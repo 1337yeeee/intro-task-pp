@@ -22,4 +22,5 @@ return [
     'Search orders' => 'Search orders',
     'Status' => 'Status',
     'Mode' => 'Mode',
+    'Download' => 'Download',
 ];

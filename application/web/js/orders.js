@@ -108,6 +108,12 @@ $(document).ready(function() {
         fetchAndUpdateServices(urlParams);
     });
 
+    $('#export-btn').on('click', function() {
+        console.log(12)
+        const params = new URLSearchParams(window.location.search);
+        window.location.href = '/api/orders/export?' + params.toString();
+    });
+
     fetchOrdersAndUpdateTable(urlParams);
     fetchAndUpdateServices(urlParams);
 

@@ -22,4 +22,5 @@ return [
     'Search orders' => 'Поиск заказов',
     'Status' => 'Статус',
     'Mode' => 'Режим',
+    'Download' => 'Скачать',
 ];

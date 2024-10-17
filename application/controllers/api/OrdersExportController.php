@@ -2,11 +2,11 @@
 
 namespace app\controllers\api;
 
+use app\services\OrderFilterService;
 use app\services\OrderService;
 use Yii;
 use yii\web\Controller;
 use app\models\Order;
-use app\models\OrderFilter;
 
 class OrdersExportController extends Controller
 {
@@ -23,7 +23,8 @@ class OrdersExportController extends Controller
 
         $service = new OrderService();
 
-        $ordersFilter = $this->getOrderFilter();
+        $filterService = new OrderFilterService();
+        $ordersFilter = $filterService->getFilter();
 
         foreach ($service->getRecentOrdersBatch(1000, $ordersFilter) as $orders) {
             foreach ($orders as $order) {
@@ -101,33 +102,5 @@ class OrdersExportController extends Controller
             Yii::t('app', 'Mode'),
             Yii::t('app', 'Created'),
         ];
-    }
-
-    private function getOrderFilter()
-    {
-        $status = Yii::$app->request->get('status');
-        $service_id = Yii::$app->request->get('service_id');
-        $mode = Yii::$app->request->get('mode');
-        $searchQuery = Yii::$app->request->get('search');
-        $searchType = Yii::$app->request->get('search-type', 1);
-
-        switch($searchType) {
-            case 2:
-                $searchColumn = 'link';
-                break;
-            case 3:
-                $searchColumn = 'users';
-                break;
-            default:
-                $searchColumn = 'id';
-        }
-
-        return new OrderFilter([
-            'status' => $status,
-            'service_id' => $service_id,
-            'mode' => $mode,
-            'searchQuery' => $searchQuery,
-            'searchColumn' => $searchColumn,
-        ]);
     }
 }

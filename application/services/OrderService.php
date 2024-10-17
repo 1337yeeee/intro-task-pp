@@ -5,21 +5,19 @@ namespace app\services;
 use app\models\Order;
 use app\models\OrderFilter;
 use Yii;
+use yii\data\Pagination;
 
 class OrderService
 {
-    public function getRecentOrders(int $page=1, int $limit=100, ?OrderFilter $filter=null) : array
+    public function getRecentOrders(Pagination $pagination, ?OrderFilter $filter=null) : array
     {
-        $offset = ($page - 1) * $limit;
-
         $query = Order::find()
             ->joinWith(['service','user'])
             ->orderBy(['id' => SORT_DESC])
-            ->limit($limit)
-            ->offset($offset);
+            ->limit($pagination->getLimit())
+            ->offset($pagination->getOffset());
 
         if($filter!==null) $filter->applyFilters($query);
-//        echo $query->createCommand()->rawSql;exit;
         return $query->asArray()->all();
     }
 
