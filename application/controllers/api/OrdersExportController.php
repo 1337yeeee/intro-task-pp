@@ -12,10 +12,7 @@ class OrdersExportController extends Controller
 {
     public function actionCsv()
     {
-        header('Content-Type: text/csv');
-        header('Content-Disposition: attachment; filename="orders.csv"');
-        header('Pragma: no-cache');
-        header('Expires: 0');
+        $this->setCsvHeaders();
 
         $output = fopen('php://output', 'w');
 
@@ -34,6 +31,14 @@ class OrdersExportController extends Controller
 
         fclose($output);
         exit;
+    }
+
+    private function setCsvHeaders(): void
+    {
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="orders.csv"');
+        header('Pragma: no-cache');
+        header('Expires: 0');
     }
 
     private function getOrderForCSV(Order $order): array
