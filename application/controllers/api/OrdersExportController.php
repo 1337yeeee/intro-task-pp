@@ -26,7 +26,7 @@ class OrdersExportController extends Controller
         $filterService = new OrderFilterService();
         $ordersFilter = $filterService->getFilter();
 
-        foreach ($service->getRecentOrdersBatch(1000, $ordersFilter) as $orders) {
+        foreach ($service->getRecentOrdersBatch(10000, $ordersFilter) as $orders) {
             foreach ($orders as $order) {
                 fputcsv($output, $this->getOrderForCSV($order));
             }
