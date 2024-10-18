@@ -49,3 +49,7 @@ phpunit.phar
 /node_modules
 .env
 package-lock.json
+
+/tests
+/tests2
+
