@@ -3,7 +3,6 @@
 namespace app\modules\orders\services;
 
 use app\modules\orders\models\OrderSearch;
-use app\modules\orders\models\Order;
 
 /**
  * Service for exporting filtered orders in a csv file
