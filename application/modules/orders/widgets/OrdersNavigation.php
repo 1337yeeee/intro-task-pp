@@ -12,6 +12,7 @@ class OrdersNavigation extends Widget
      * Renders the widget.
      *
      * @return string
+     * @throws \Throwable
      */
     public function run(): string
     {
