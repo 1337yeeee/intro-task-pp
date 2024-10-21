@@ -62,14 +62,20 @@ class OrdersNavigation extends Widget
     public function getUrl(?string $status = null): string
     {
         $params = Yii::$app->request->queryParams;
-        unset($params['service_id']);
-        unset($params['status']);
-        unset($params['mode']);
+
+        $newParams = [];
+
+        if (isset($params['search'])) {
+            $newParams['search'] = $params['search'];
+        }
+        if (isset($params['status'])) {
+            $newParams['search_type'] = $params['search_type'];
+        }
 
         if ($status) {
-            return Url::to(array_merge(['/orders/' . $status], $params));
+            return Url::to(array_merge(['/orders/' . $status], $newParams));
         } else {
-            return Url::to(array_merge(['/orders'], $params));
+            return Url::to(array_merge(['/orders'], $newParams));
         }
     }
 }

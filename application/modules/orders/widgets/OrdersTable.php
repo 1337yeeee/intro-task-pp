@@ -102,14 +102,14 @@ class OrdersTable extends GridView
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">';
 
-        $currentMode = Yii::$app->request->get('service_id', '');
+        $currentServiceId = Yii::$app->request->get('service_id', '');
 
         // Добавляем элемент "All"
-        $dropdownHtml .= '<li class="' . ($currentMode === '' ? 'active' : '') . '"><a href="' . self::createUrlWithParam('service_id', '') . '">' . Yii::t('app', 'All') . ' (894931)</a></li>';
+        $dropdownHtml .= '<li class="' . ($currentServiceId === '' ? 'active' : '') . '"><a href="' . self::createUrlWithParam('service_id', '') . '">' . Yii::t('app', 'All') . ' (894931)</a></li>';
 
         // Добавляем остальные сервисы
         foreach ($servicesList as $service) {
-            $dropdownHtml .= '<li><a ' . ($currentMode === (string)$service['id'] ? 'active' : '') . ' href="' . self::createUrlWithParam('service_id', $service['id']) . '"><span class="label-id">' . $service['order_count'] . '</span> ' . $service['name'] . '</a></li>';
+            $dropdownHtml .= '<li><a ' . ($currentServiceId === (string)$service['id'] ? 'active' : '') . ' href="' . self::createUrlWithParam('service_id', $service['id']) . '"><span class="label-id">' . $service['order_count'] . '</span> ' . $service['name'] . '</a></li>';
         }
 
         $dropdownHtml .= '</ul></div>';
@@ -168,6 +168,8 @@ class OrdersTable extends GridView
         } else {
             $params[$param] = $value;
         }
+
+        $params['page'] = 1;
 
         return Yii::$app->urlManager->createUrl(['orders'] + $params);
     }
