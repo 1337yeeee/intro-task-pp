@@ -6,30 +6,28 @@ use Yii;
 use yii\base\Widget;
 use yii\helpers\Url;
 
+/**
+ * Widget for rendering orders navigation tabs.
+ */
 class OrdersNavigation extends Widget
 {
     /**
-     * Renders the widget.
-     *
-     * @return string
-     * @throws \Throwable
+     * @inheritDoc
      */
     public function run(): string
     {
-        return $this->renderTabs();
+        return $this->render('ordersNavigation', [
+            'statuses' => $this->getStatuses(),
+            'currentStatus' => Yii::$app->request->get('status', null),
+        ]);
     }
 
     /**
-     * Renders the order status tabs.
-     *
-     * @return string The HTML for the tabs
-     * @throws \Throwable
+     * Returns the available statuses for orders.
      */
-    protected function renderTabs(): string
+    protected function getStatuses(): array
     {
-        $currentStatus = Yii::$app->request->get('status', null);
-
-        $statuses = [
+        return [
             '' => Yii::t('app', 'All orders'),
             'pending' => Yii::t('app', 'Pending'),
             'inprogress' => Yii::t('app', 'In progress'),
@@ -37,27 +35,10 @@ class OrdersNavigation extends Widget
             'canceled' => Yii::t('app', 'Canceled'),
             'error' => Yii::t('app', 'Error'),
         ];
-
-        $html = '<ul class="nav nav-tabs p-b" id="nav-tabs">';
-
-        foreach ($statuses as $status => $label) {
-            $activeClass = ($currentStatus === $status) ? 'active' : '';
-            $html .= '<li data-type="status" data-status="' . $status . '" class="' . $activeClass . '">';
-            $html .= '<a href="' . $this->getUrl($status) . '">' . $label . '</a>';
-            $html .= '</li>';
-        }
-
-        $html .= '<li class="pull-right custom-search">' . OrdersSearchForm::widget() . '</li>';
-        $html .= '</ul>';
-
-        return $html;
     }
 
     /**
-     * Creates a URL to orders/<status>
-     *
-     * @param string|null $status
-     * @return string
+     * Generates URL with the given status.
      */
     public function getUrl(?string $status = null): string
     {
