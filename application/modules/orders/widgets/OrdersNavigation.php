@@ -31,11 +31,11 @@ class OrdersNavigation extends Widget
 
         $statuses = [
             '' => Yii::t('app', 'All orders'),
-            'Pending' => Yii::t('app', 'Pending'),
-            'In progress' => Yii::t('app', 'In progress'),
-            'Completed' => Yii::t('app', 'Completed'),
-            'Canceled' => Yii::t('app', 'Canceled'),
-            'Error' => Yii::t('app', 'Error'),
+            'pending' => Yii::t('app', 'Pending'),
+            'inprogress' => Yii::t('app', 'In progress'),
+            'completed' => Yii::t('app', 'Completed'),
+            'canceled' => Yii::t('app', 'Canceled'),
+            'error' => Yii::t('app', 'Error'),
         ];
 
         $html = '<ul class="nav nav-tabs p-b" id="nav-tabs">';
@@ -66,10 +66,10 @@ class OrdersNavigation extends Widget
         $newParams = [];
 
         if (isset($params['search'])) {
-            $newParams['search'] = $params['search'];
+            $newParams['search'] = $params['search'] ?? null;
         }
         if (isset($params['status'])) {
-            $newParams['search_type'] = $params['search_type'];
+            $newParams['search_type'] = $params['search_type'] ?? null;
         }
 
         if ($status) {

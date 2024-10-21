@@ -107,11 +107,11 @@ class OrderFilterService
     private function getStatusesMap(): array
     {
         return [
-            'Pending' => 0,
-            'In progress' => 1,
-            'Completed' => 2,
-            'Canceled' => 3,
-            'Error' => 4,
+            'pending' => 0,
+            'inprogress' => 1,
+            'completed' => 2,
+            'canceled' => 3,
+            'error' => 4,
         ];
     }
 
