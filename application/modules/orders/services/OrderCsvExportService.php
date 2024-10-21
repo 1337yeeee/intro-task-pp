@@ -5,8 +5,16 @@ namespace app\modules\orders\services;
 use app\modules\orders\models\OrderSearch;
 use app\modules\orders\models\Order;
 
+/**
+ * Service for exporting filtered orders in a csv file
+ */
 class OrderCsvExportService
 {
+    /**
+     * Exports a CSV file with filtered data
+     *
+     * @return void
+     */
     public function exportToCsv(): void
     {
         $this->setCsvHeaders();
@@ -18,8 +26,7 @@ class OrderCsvExportService
         $filterService = new OrderFilterService();
         $ordersFilter = $filterService->getFilter($searchModel);
 
-        $query = $searchModel->getRecentOrdersBatch2($ordersFilter);
-        foreach ($query->batch(10000) as $ordersBatch) {
+        foreach ($searchModel->getRecentOrdersBatch(100, $ordersFilter) as $ordersBatch) {
             foreach ($ordersBatch as $order) {
                 fputcsv($output, $this->getOrderForCSV($order));
                 flush();
@@ -29,6 +36,11 @@ class OrderCsvExportService
         fclose($output);
     }
 
+    /**
+     * Sets HTTP headers for sending the scv file
+     *
+     * @return void
+     */
     private function setCsvHeaders(): void
     {
         header('Content-Type: text/csv');
@@ -37,6 +49,11 @@ class OrderCsvExportService
         header('Expires: 0');
     }
 
+    /**
+     * Returns headers for the csv file
+     *
+     * @return string[]
+     */
     private function getCsvHeaders(): array
     {
         return [
@@ -44,6 +61,12 @@ class OrderCsvExportService
         ];
     }
 
+    /**
+     * Returns an array that will be written in the csv file
+     *
+     * @param Order $order
+     * @return array
+     */
     private function getOrderForCSV(Order $order): array
     {
         $userName = isset($order->user)

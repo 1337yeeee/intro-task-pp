@@ -11,14 +11,21 @@ use yii\helpers\Html;
  */
 class OrdersTable extends GridView
 {
+    /**
+     * @inheritDoc
+     */
     public static function widget($config = []): string
     {
-        $dataProvider = clone $config['dataProvider'];
-        $dataProvider->pagination = false;
+        $dataProvider = $config['dataProvider'];
+
+        $layoutPages = '<div class="row">
+            <div class="col-sm-8">{pager}</div>
+            <div class="col-sm-4 pagination-counters">{summary}</div>
+        </div>';
 
         return parent::widget([
             'dataProvider' => $dataProvider,
-            'summary' => false,
+            'layout' => "{items}\n{$layoutPages}",
             'columns' => [
                 [
                     'attribute' => 'id',
@@ -80,7 +87,13 @@ class OrdersTable extends GridView
         ]);
     }
 
-    private static function renderDropdownService($servicesList)
+    /**
+     * Renders drop down header for services
+     *
+     * @param $servicesList
+     * @return string
+     */
+    private static function renderDropdownService($servicesList): string
     {
         $dropdownHtml = '<div class="dropdown">
             <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -104,6 +117,11 @@ class OrdersTable extends GridView
         return $dropdownHtml;
     }
 
+    /**
+     *  Renders drop down header for modes
+     *
+     * @return string
+     */
     private static function renderDropdownMode(): string
     {
         $currentMode = Yii::$app->request->get('mode', '');
@@ -134,6 +152,13 @@ class OrdersTable extends GridView
             </div>';
     }
 
+    /**
+     * Creates a URL with passed params
+     *
+     * @param $param
+     * @param $value
+     * @return string
+     */
     private static function createUrlWithParam($param, $value): string
     {
         $params = Yii::$app->request->getQueryParams();

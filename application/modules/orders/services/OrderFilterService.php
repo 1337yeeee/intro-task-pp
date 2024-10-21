@@ -89,11 +89,12 @@ class OrderFilterService
      */
     private function getStatusFilter(): ?int
     {
-        if ($this->isFilterIgnored('status')) {
+        $status = Yii::$app->request->get('status', 1);
+
+        if ($this->isFilterIgnored('status') || $status === null) {
             return null;
         }
 
-        $status = Yii::$app->request->get('status');
         $statusesNameToNum = $this->getStatusesMap();
 
         return $statusesNameToNum[$status] ?? null;
@@ -129,7 +130,7 @@ class OrderFilterService
                 $column = 'link';
                 break;
             case 2:
-                $column = 'user';
+                $column = 'users';
                 break;
             default:
                 $column = 'id';

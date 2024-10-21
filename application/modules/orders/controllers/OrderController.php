@@ -5,6 +5,7 @@ namespace app\modules\orders\controllers;
 use app\modules\orders\services\OrderCsvExportService;
 use app\modules\orders\services\OrderFilterService;
 use app\modules\orders\services\OrderPaginationService;
+use yii\helpers\Url;
 use Yii;
 use yii\web\Controller;
 
@@ -30,10 +31,13 @@ class OrderController extends Controller
         $filterService = new OrderFilterService();
         $filteredOrders = $filterService->getFilteredOrders($pagination);
 
+        $exportPath = Url::to(array_merge(['order/csv'], Yii::$app->request->queryParams));
+
         return $this->render('index', [
             'dataProvider' => $filteredOrders['dataProvider'],
             'searchModel' => $filteredOrders['searchModel'],
             'servicesList' => $filteredOrders['servicesList'],
+            'exportPath' => $exportPath,
         ]);
     }
 

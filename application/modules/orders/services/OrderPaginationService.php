@@ -5,6 +5,9 @@ namespace app\modules\orders\services;
 use yii\data\Pagination;
 use yii\web\Request;
 
+/**
+ * Service for assembling an instance of yii\data\Pagination
+ */
 class OrderPaginationService
 {
     private $request;
@@ -20,13 +23,18 @@ class OrderPaginationService
         $this->route = $route;
     }
 
+    /**
+     * Returns an instance of Pagination class with prepared parameters
+     *
+     * @return Pagination
+     */
     public function getPagination(): Pagination
     {
         $perPage = $this->request->get('limit', $this->defaultLimit);
         $page = $this->request->get('page', $this->defaultPage);
 
         return new Pagination([
-            'totalCount' => 0, // Это значение позже будет установлено через фильтр
+            'totalCount' => 0, // Filter will set this value
             'pageSize' => $perPage,
             'page' => $page - 1,
             'route' => $this->route

@@ -46,8 +46,9 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'orders/export' => 'orders/order/csv',
+                'orders/<status>' => 'orders/order/index',
                 'orders' => 'orders/order/index',
-                'orders/export' => 'orders/order/csv'
             ],
         ],
         'i18n' => [
