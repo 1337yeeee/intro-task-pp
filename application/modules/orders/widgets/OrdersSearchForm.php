@@ -21,7 +21,7 @@ class OrdersSearchForm extends Widget
     public function init()
     {
         parent::init();
-        // Установим значения по умолчанию, если их нет
+        // Using default values if variables hadn't been set
         $this->search = $this->search ?? Yii::$app->request->get('search', '');
         $this->searchType = $this->searchType ?? Yii::$app->request->get('search_type', '0');
     }
