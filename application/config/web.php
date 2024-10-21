@@ -9,7 +9,7 @@ $config = [
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
     'components' => [
         'request' => [
@@ -46,9 +46,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                ['class' => 'yii\rest\UrlRule', 'controller' => ['api/orders', 'api/services']],
-                'orders' => 'orders/index',
-                'api/orders/export' => 'api/orders-export/csv'
+                'orders' => 'orders/order/index',
+                'orders/export' => 'orders/order/csv'
             ],
         ],
         'i18n' => [
@@ -62,6 +61,11 @@ $config = [
                     ],
                 ],
             ],
+        ],
+    ],
+    'modules' => [
+        'orders' => [
+            'class' => 'app\modules\orders\Module',
         ],
     ],
     'language' => getenv('APP_LANGUAGE'),

@@ -1,24 +1,33 @@
 <?php
 
-namespace app\services;
+namespace app\modules\orders\services;
 
-use app\models\Order;
-use app\models\OrderFilter;
+use app\modules\orders\models\Order;
+use app\modules\orders\models\OrderFilter;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
 
 class OrderService
 {
-    public function getRecentOrders(Pagination $pagination, ?OrderFilter $filter=null) : array
+    public function getRecentOrders(Pagination $pagination, ?OrderFilter $filter = null): ActiveDataProvider
     {
         $query = Order::find()
-            ->joinWith(['service','user'])
+            ->joinWith(['service', 'user'])
             ->orderBy(['id' => SORT_DESC])
             ->limit($pagination->getLimit())
             ->offset($pagination->getOffset());
 
-        if($filter!==null) $filter->applyFilters($query);
-        return $query->asArray()->all();
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => $pagination,
+        ]);
+
+        if ($filter !== null) {
+            $filter->applyFilters($query);
+        }
+
+        return $dataProvider;
     }
 
     public function getRecentOrdersBatch(int $batchSize = 1000, ?OrderFilter $filter = null): \Generator
@@ -36,16 +45,29 @@ class OrderService
         }
     }
 
-    public function getCount(?OrderFilter $filter=null)
+    public function getRecentOrdersBatch2(OrderFilter $filter = null)
+    {
+        $query = Order::find()
+            ->joinWith(['service', 'user'])
+            ->orderBy(['id' => SORT_DESC]);
+
+        if ($filter !== null) {
+            $filter->applyFilters($query);
+        }
+
+        return $query;
+    }
+
+    public function getCount(?OrderFilter $filter = null)
     {
         $query = Order::find();
 
-        if($filter!==null) $filter->applyFilters($query);
+        if ($filter !== null) $filter->applyFilters($query);
 
         return $query->count();
     }
 
-    public function getServicesOfOrders(?OrderFilter $filter=null): array
+    public function getServicesOfOrders(?OrderFilter $filter = null): array
     {
         $query = Order::find()
             ->joinWith('service')

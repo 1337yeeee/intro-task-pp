@@ -1,36 +1,32 @@
 <?php
 
-namespace app\controllers\api;
+namespace app\modules\orders\services;
 
-use app\services\OrderFilterService;
-use app\services\OrderService;
-use Yii;
-use yii\web\Controller;
-use app\models\Order;
+use app\modules\orders\models\OrderSearch;
+use app\modules\orders\models\Order;
 
-class OrdersExportController extends Controller
+class OrderCsvExportService
 {
-    public function actionCsv()
+    public function exportToCsv(): void
     {
         $this->setCsvHeaders();
 
         $output = fopen('php://output', 'w');
-
         fputcsv($output, $this->getCsvHeaders());
 
-        $service = new OrderService();
-
+        $searchModel = new OrderSearch();
         $filterService = new OrderFilterService();
-        $ordersFilter = $filterService->getFilter();
+        $ordersFilter = $filterService->getFilter($searchModel);
 
-        foreach ($service->getRecentOrdersBatch(10000, $ordersFilter) as $orders) {
-            foreach ($orders as $order) {
+        $query = $searchModel->getRecentOrdersBatch2($ordersFilter);
+        foreach ($query->batch(10000) as $ordersBatch) {
+            foreach ($ordersBatch as $order) {
                 fputcsv($output, $this->getOrderForCSV($order));
+                flush();
             }
         }
 
         fclose($output);
-        exit;
     }
 
     private function setCsvHeaders(): void
@@ -41,25 +37,29 @@ class OrdersExportController extends Controller
         header('Expires: 0');
     }
 
+    private function getCsvHeaders(): array
+    {
+        return [
+            'ID', 'User', 'Link', 'Quantity', 'Service', 'Status', 'Mode', 'Created'
+        ];
+    }
+
     private function getOrderForCSV(Order $order): array
     {
-        // Получаем имя пользователя
         $userName = isset($order->user)
             ? ($order->user->first_name ?? '') . ' ' . ($order->user->last_name ?? '')
             : '';
 
-        // Получаем имя сервиса
         $service = isset($order->service)
             ? $order->service->name ?? ''
             : '';
 
-        // Получаем статус, режим и дату создания
         $status = $order->getStatus();
         $mode = $order->getMode();
         $date = \date('Y-m-d H:i:s', $order->created_at);
 
         return [
-            $order->id ?? '',          // Используем объектный доступ к атрибутам
+            $order->id ?? '',
             $userName,
             $order->link ?? '',
             $order->quantity ?? '',
@@ -67,20 +67,6 @@ class OrdersExportController extends Controller
             $status,
             $mode,
             $date,
-        ];
-    }
-
-    private function getCsvHeaders(): array
-    {
-        return [
-            Yii::t('app', 'ID'),
-            Yii::t('app', 'User'),
-            Yii::t('app', 'Link'),
-            Yii::t('app', 'Quantity'),
-            Yii::t('app', 'Service'),
-            Yii::t('app', 'Status'),
-            Yii::t('app', 'Mode'),
-            Yii::t('app', 'Created'),
         ];
     }
 }
