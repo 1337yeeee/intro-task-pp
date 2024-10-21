@@ -24,7 +24,7 @@ class OrderCsvExportService
 
         $searchModel = new OrderSearch();
         $filterService = new OrderFilterService();
-        $ordersFilter = $filterService->getFilter($searchModel);
+        $ordersFilter = $filterService->getFilter();
 
         foreach ($searchModel->getRecentOrdersBatch(100, $ordersFilter) as $ordersBatch) {
             foreach ($ordersBatch as $order) {

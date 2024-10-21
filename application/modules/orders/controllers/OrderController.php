@@ -16,16 +16,19 @@ class OrderController extends Controller
 {
     private const DEFAULT_LIMIT = 100;
     private const DEFAULT_PAGE = 1;
-    private const INDEX_ROUTE = 'orders/index';
+    private const DEFAULT_ROUTE = 'index';
+    private const INDEX_ROUTE = 'orders';
 
     /**
      * Display filtered orders.
      *
+     * @param string|null $status
      * @return string
      */
-    public function actionIndex(): string
+    public function actionIndex(?string $status = null): string
     {
-        $paginationService = new OrderPaginationService(Yii::$app->request, self::DEFAULT_LIMIT, self::DEFAULT_PAGE, self::INDEX_ROUTE);
+        $route = self::INDEX_ROUTE . '/' . ($status ?: self::DEFAULT_ROUTE);
+        $paginationService = new OrderPaginationService(Yii::$app->request, self::DEFAULT_LIMIT, self::DEFAULT_PAGE, $route);
         $pagination = $paginationService->getPagination();
 
         $filterService = new OrderFilterService();
@@ -35,7 +38,6 @@ class OrderController extends Controller
 
         return $this->render('index', [
             'dataProvider' => $filteredOrders['dataProvider'],
-            'searchModel' => $filteredOrders['searchModel'],
             'servicesList' => $filteredOrders['servicesList'],
             'exportPath' => $exportPath,
         ]);

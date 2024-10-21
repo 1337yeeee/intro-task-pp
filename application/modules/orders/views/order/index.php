@@ -2,7 +2,6 @@
 
 /** @var string $exportPath */
 /** @var array $servicesList */
-/** @var app\modules\orders\models\Order $searchModel */
 
 /** @var app\modules\orders\models\OrderSearch $dataProvider */
 
@@ -44,7 +43,6 @@ use app\modules\orders\widgets\OrdersNavigation;
 
     <?= OrdersTable::widget([
         'dataProvider' => $dataProvider,
-        'searchModel' => $searchModel,
         'servicesList' => $servicesList,
     ]); ?>
     <div class="row">
