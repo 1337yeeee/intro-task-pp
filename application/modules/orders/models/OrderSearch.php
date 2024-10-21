@@ -72,7 +72,8 @@ class OrderSearch extends Order
         $query = self::find()
             ->joinWith('service')
             ->select(['services.name', 'services.id', 'COUNT(orders.id) as order_count'])
-            ->groupBy(['services.name', 'services.id']);
+            ->groupBy(['services.name', 'services.id'])
+            ->orderBy(['order_count' => SORT_DESC]);
 
         $filter->applyFilters($query);
 
