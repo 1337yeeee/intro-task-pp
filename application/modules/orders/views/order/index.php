@@ -8,6 +8,7 @@
 use app\modules\orders\widgets\OrdersTable;
 use app\modules\orders\widgets\NavbarHeader;
 use app\modules\orders\widgets\OrdersNavigation;
+use app\modules\orders\widgets\DownloadButton;
 
 ?>
 
@@ -45,13 +46,10 @@ use app\modules\orders\widgets\OrdersNavigation;
         'dataProvider' => $dataProvider,
         'servicesList' => $servicesList,
     ]); ?>
-    <div class="row">
-        <div class="col-sm-12 text-right">
-            <a href="<?= $exportPath ?>" class="btn btn-primary">
-                <?= Yii::t('app', 'Download') ?>
-            </a>
-        </div>
-    </div>
+
+    <?= DownloadButton::widget([
+        'exportPath' => $exportPath,
+    ]); ?>
 </div>
 
 <script src="/js/jquery.min.js"></script>
