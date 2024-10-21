@@ -102,11 +102,18 @@ class OrderSearch extends Order
      * @param OrderFilter|null $filter
      * @return \Generator
      */
-    public function getRecentOrdersBatch(int $batchSize = 1000, ?OrderFilter $filter = null): \Generator
+    public function getRecentOrdersBatch(int $batchSize = 100, ?OrderFilter $filter = null): \Generator
     {
-        $query = Order::find()
-            ->joinWith(['service', 'user'])
-            ->orderBy(['id' => SORT_DESC]);
+        $query = (new \yii\db\Query())
+            ->select([
+                'orders.id', 'orders.status', 'orders.mode', 'orders.link',
+                'orders.quantity', 'orders.created_at', 'users.first_name',
+                'users.last_name', 'services.name service_name',
+            ])
+            ->from('orders')
+            ->join('LEFT JOIN', 'services', 'services.id = orders.service_id')
+            ->join('LEFT JOIN', 'users', 'users.id = orders.user_id')
+            ->orderBy(['orders.id' => SORT_DESC]);
 
         if ($filter !== null) {
             $filter->applyFilters($query);

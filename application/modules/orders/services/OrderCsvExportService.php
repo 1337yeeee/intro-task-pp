@@ -26,11 +26,13 @@ class OrderCsvExportService
         $filterService = new OrderFilterService();
         $ordersFilter = $filterService->getFilter();
 
-        foreach ($searchModel->getRecentOrdersBatch(100, $ordersFilter) as $ordersBatch) {
+        foreach ($searchModel->getRecentOrdersBatch(10, $ordersFilter) as $ordersBatch) {
             foreach ($ordersBatch as $order) {
                 fputcsv($output, $this->getOrderForCSV($order));
                 flush();
+                unset($order);
             }
+            unset($ordersBatch);
         }
 
         fclose($output);
@@ -64,28 +66,22 @@ class OrderCsvExportService
     /**
      * Returns an array that will be written in the csv file
      *
-     * @param Order $order
+     * @param array $order
      * @return array
      */
-    private function getOrderForCSV(Order $order): array
+    private function getOrderForCSV(array $order): array
     {
-        $userName = isset($order->user)
-            ? ($order->user->first_name ?? '') . ' ' . ($order->user->last_name ?? '')
-            : '';
-
-        $service = isset($order->service)
-            ? $order->service->name ?? ''
-            : '';
-
-        $status = $order->getStatus();
-        $mode = $order->getMode();
-        $date = \date('Y-m-d H:i:s', $order->created_at);
+        $userName = ($order['first_name'] ?? '') . ' ' . ($order['last_name'] ?? '');
+        $service = $order['service_name'] ?? '';
+        $status = $order['status'];
+        $mode = $order['mode'];
+        $date = \date('Y-m-d H:i:s', $order['created_at']);
 
         return [
-            $order->id ?? '',
+            $order['id'] ?? '',
             $userName,
-            $order->link ?? '',
-            $order->quantity ?? '',
+            $order['link'] ?? '',
+            $order['quantity'] ?? '',
             $service,
             $status,
             $mode,
