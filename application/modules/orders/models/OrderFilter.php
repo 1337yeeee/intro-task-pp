@@ -2,6 +2,11 @@
 
 namespace app\modules\orders\models;
 
+use yii\db\ActiveQuery;
+
+/**
+ * Class for applying filters on query which works with orders
+ */
 class OrderFilter
 {
     public $status;
@@ -9,6 +14,7 @@ class OrderFilter
     public $mode;
     public $searchQuery;
     public $searchColumn;
+    private bool $doJoin;
 
     public function __construct($params = [])
     {
@@ -19,6 +25,23 @@ class OrderFilter
         }
     }
 
+    /**
+     * If `false` tables won't be joined in `applyFilters` method
+     *
+     * @param bool $doJoin
+     * @return void
+     */
+    public function setDoJoin(bool $doJoin = true)
+    {
+        $this->doJoin = $doJoin;
+    }
+
+    /**
+     * Applies filters on the query
+     *
+     * @param $query
+     * @return void
+     */
     public function applyFilters($query)
     {
         if ($this->status !== null) {
@@ -35,9 +58,18 @@ class OrderFilter
         }
     }
 
+    /**
+     * Applies search filter if the parameters are set
+     *
+     * @param $query
+     * @return void
+     */
     protected function applySearch($query)
     {
-        $query->joinWith(['user', 'service']);
+        if ($this->doJoin) {
+            $query->joinWith(['user', 'service']);
+        }
+
 
         $searchConditions = [];
         if ($this->searchColumn === 'link') {

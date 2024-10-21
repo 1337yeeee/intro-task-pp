@@ -67,7 +67,7 @@ class OrderSearch extends Order
      * @param OrderFilter|null $filter
      * @return array|ActiveRecord[]
      */
-    public static function getServicesOfOrders(?OrderFilter $filter = null)
+    public static function getServicesOfOrders(?OrderFilter $filter = null): array
     {
         $query = self::find()
             ->joinWith('service')
@@ -116,6 +116,7 @@ class OrderSearch extends Order
             ->orderBy(['orders.id' => SORT_DESC]);
 
         if ($filter !== null) {
+            $filter->setDoJoin(false);
             $filter->applyFilters($query);
         }
 
