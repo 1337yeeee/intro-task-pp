@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\orders\controllers;
+namespace orders\controllers;
 
 use app\modules\orders\services\OrderCsvExportService;
 use app\modules\orders\services\OrderFilterService;
