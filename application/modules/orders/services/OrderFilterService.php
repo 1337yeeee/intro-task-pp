@@ -34,6 +34,7 @@ class OrderFilterService
         return [
             'dataProvider' => $ordersDataProvider,
             'servicesList' => $servicesList,
+            'searchModel' => $searchModel,
         ];
     }
 

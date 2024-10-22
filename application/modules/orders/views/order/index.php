@@ -1,9 +1,12 @@
 <?php
 
 /** @var string $exportPath */
+
 /** @var array $servicesList */
 
-/** @var app\modules\orders\models\OrderSearch $dataProvider */
+/** @var yii\data\ActiveDataProvider $dataProvider */
+
+/** @var app\modules\orders\models\OrderSearch $searchModel */
 
 use app\modules\orders\widgets\OrdersTable;
 use app\modules\orders\widgets\NavbarHeader;
@@ -40,11 +43,14 @@ use app\modules\orders\widgets\DownloadButton;
 <?= NavbarHeader::widget() ?>
 
 <div class="container-fluid">
-    <?= OrdersNavigation::widget() ?>
+    <?= OrdersNavigation::widget([
+        'searchModel' => $searchModel,
+    ]) ?>
 
     <?= OrdersTable::widget([
         'dataProvider' => $dataProvider,
         'servicesList' => $servicesList,
+        'searchModel' => $searchModel,
     ]); ?>
 
     <?= DownloadButton::widget([

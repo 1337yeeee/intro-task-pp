@@ -39,6 +39,7 @@ class OrderController extends Controller
         return $this->render('index', [
             'dataProvider' => $filteredOrders['dataProvider'],
             'servicesList' => $filteredOrders['servicesList'],
+            'searchModel' => $filteredOrders['searchModel'],
             'exportPath' => $exportPath,
         ]);
     }

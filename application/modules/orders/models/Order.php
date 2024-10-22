@@ -16,6 +16,20 @@ use yii\db\ActiveRecord;
  */
 class Order extends ActiveRecord
 {
+
+    private const MODES = [
+        0 => 'Manual',
+        1 => 'Auto',
+    ];
+
+    private const STATUSES = [
+        0 => 'Pending',
+        1 => 'In progress',
+        2 => 'Completed',
+        3 => 'Canceled',
+        4 => 'Error',
+    ];
+
     /**
      * @inheritDoc
      */
@@ -44,8 +58,6 @@ class Order extends ActiveRecord
         return $this->hasOne(Service::class, ['id' => 'service_id']);
     }
 
-    private static array $modes;
-
     /**
      * Returns mode as a string of this order
      *
@@ -54,15 +66,13 @@ class Order extends ActiveRecord
     public function getMode(): string
     {
         $modeValue = $this->getAttribute('mode');
-        if (isset(self::$modes)) return self::$modes[$modeValue] ?? '';
-        self::$modes = [
-            0 => Yii::t('app', 'Manual'),
-            1 => Yii::t('app', 'Auto'),
-        ];
-        return self::$modes[$modeValue] ?? '';
-    }
 
-    private static array $statuses;
+        if (isset(self::MODES[$modeValue])) {
+            return Yii::t('app', self::MODES[$modeValue]);
+        }
+
+        return '';
+    }
 
     /**
      * Returns status as a string of this order
@@ -72,15 +82,25 @@ class Order extends ActiveRecord
     public function getStatus(): string
     {
         $statusValue = $this->getAttribute('status');
-        if (isset(self::$statuses)) return self::$statuses[$statusValue] ?? '';
-        self::$statuses = [
-            0 => Yii::t('app', 'Pending'),
-            1 => Yii::t('app', 'In progress'),
-            2 => Yii::t('app', 'Completed'),
-            3 => Yii::t('app', 'Canceled'),
-            4 => Yii::t('app', 'Error'),
-        ];
-        return self::$statuses[$statusValue] ?? '';
+        if (isset(self::STATUSES[$statusValue])) {
+            return Yii::t('app', self::STATUSES[$statusValue]);
+        }
+
+        return '';
+    }
+
+    public function getStatuses(): array
+    {
+        return array_map(function ($value) {
+            return Yii::t('app', $value);
+        }, self::STATUSES);
+    }
+
+    public function getModes(): array
+    {
+        return array_map(function ($key, $value) {
+            return Yii::t('app', $value);
+        }, self::MODES);
     }
 
 }

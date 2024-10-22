@@ -11,30 +11,18 @@ use yii\helpers\Url;
  */
 class OrdersNavigation extends Widget
 {
+
+    public $searchModel;
+
     /**
      * @inheritDoc
      */
     public function run(): string
     {
         return $this->render('ordersNavigation', [
-            'statuses' => $this->getStatuses(),
+            'statuses' => $this->searchModel->getStatuses(),
             'currentStatus' => Yii::$app->request->get('status', null),
         ]);
-    }
-
-    /**
-     * Returns the available statuses for orders.
-     */
-    protected function getStatuses(): array
-    {
-        return [
-            '' => Yii::t('app', 'All orders'),
-            'pending' => Yii::t('app', 'Pending'),
-            'inprogress' => Yii::t('app', 'In progress'),
-            'completed' => Yii::t('app', 'Completed'),
-            'canceled' => Yii::t('app', 'Canceled'),
-            'error' => Yii::t('app', 'Error'),
-        ];
     }
 
     /**

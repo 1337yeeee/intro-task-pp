@@ -2,6 +2,7 @@
 
 namespace app\modules\orders\models;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
@@ -15,6 +16,21 @@ class OrderSearch extends Order
     public string $search = '';
     public int $search_type = 0;
 
+    private const STATUSES = [
+        '' => 'All orders',
+        'pending' => 'Pending',
+        'inprogress' => 'In progress',
+        'completed' => 'Completed',
+        'canceled' => 'Canceled',
+        'error' => 'Error',
+    ];
+
+    private const MODES = [
+        '' => 'All',
+        '0' => 'Manual',
+        '1' => 'Auto',
+    ];
+
     /**
      * @inheritDoc
      */
@@ -22,7 +38,7 @@ class OrderSearch extends Order
     {
         return [
             [['search'], 'safe'],
-            [['$search_type'], 'integer'],
+            [['search_type'], 'integer'],
         ];
     }
 
@@ -123,5 +139,29 @@ class OrderSearch extends Order
         foreach ($query->batch($batchSize) as $ordersBatch) {
             yield $ordersBatch;
         }
+    }
+
+    /**
+     * Returns the available statuses for orders.
+     *
+     * @return array
+     */
+    public function getStatuses(): array
+    {
+        return array_map(function ($value) {
+            return Yii::t('app', $value);
+        }, self::STATUSES);
+    }
+
+    /**
+     * Returns the available modes for orders.
+     *
+     * @return array
+     */
+    public function getModes(): array
+    {
+        return array_map(function ($value) {
+            return Yii::t('app', $value);
+        }, self::MODES);
     }
 }

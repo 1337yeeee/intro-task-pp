@@ -11,12 +11,16 @@ use yii\helpers\Html;
  */
 class OrdersTable extends GridView
 {
+
+    private static $searchModel;
+
     /**
      * @inheritDoc
      */
     public static function widget($config = []): string
     {
         $dataProvider = $config['dataProvider'];
+        self::$searchModel = $config['searchModel'];
 
         $layoutPages = '<div class="row">
             <div class="col-sm-8">{pager}</div>
@@ -70,13 +74,7 @@ class OrdersTable extends GridView
             [
                 'attribute' => 'status',
                 'label' => Yii::t('app', 'Status'),
-                'filter' => [
-                    'Pending' => Yii::t('app', 'Pending'),
-                    'In progress' => Yii::t('app', 'In progress'),
-                    'Completed' => Yii::t('app', 'Completed'),
-                    'Canceled' => Yii::t('app', 'Canceled'),
-                    'Error' => Yii::t('app', 'Error'),
-                ],
+                'filter' => self::$searchModel->getStatuses(),
                 'value' => function ($model) {
                     return $model->getStatus();
                 }
@@ -141,24 +139,29 @@ class OrdersTable extends GridView
             $currentMode = '';
         }
 
-        return '
-            <div class="dropdown">
-              <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                ' . Yii::t('app', 'Mode') . '
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                <li class="' . ($currentMode === '' ? 'active' : '') . '">
-                    <a href="' . self::createUrlWithParam('mode', '') . '">' . Yii::t('app', 'All') . '</a>
-                </li>
-                <li class="' . ($currentMode === '0' ? 'active' : '') . '">
-                    <a href="' . self::createUrlWithParam('mode', '0') . '">' . Yii::t('app', 'Manual') . '</a>
-                </li>
-                <li class="' . ($currentMode === '1' ? 'active' : '') . '">
-                    <a href="' . self::createUrlWithParam('mode', '1') . '">' . Yii::t('app', 'Auto') . '</a>
-                </li>
-              </ul>
-            </div>';
+        $html = '<div class="dropdown">
+                <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    ' . Yii::t('app', 'Mode') . '
+                    <span class="caret"></span>
+                </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">';
+
+        $modes = self::$searchModel->getModes();
+
+        foreach ($modes as $key => $mode) {
+            $active = $currentMode === $key ? 'active' : '';
+            $href = self::createUrlWithParam('mode', $key);
+            $modeName = $mode;
+            $html .= <<<HTML
+            <li class="{$active}">
+                <a href="{$href}">{$modeName}</a>
+            </li>
+            HTML;
+        }
+
+        $html .= '</ul></div>';
+
+        return $html;
     }
 
     /**
