@@ -15,6 +15,7 @@ class OrderSearch extends Order
 {
     public string $search = '';
     public int $search_type = 0;
+    public $page;
 
     private const STATUSES = [
         '' => 'All orders',
@@ -32,13 +33,18 @@ class OrderSearch extends Order
     ];
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function rules(): array
     {
         return [
-            [['search'], 'safe'],
-            [['search_type'], 'integer'],
+            [['status', 'search', 'search_type', 'service_id', 'page', 'mode'], 'safe'],
+            ['status', 'in', 'range' => array_keys(self::STATUSES)],
+            ['mode', 'in', 'range' => array_keys(self::MODES)],
+            ['service_id', 'integer'],
+            ['page', 'integer', 'min' => 1],
+            ['search_type', 'integer'],
+            ['search', 'string'],
         ];
     }
 

@@ -2,19 +2,18 @@
 
 namespace app\modules\orders\models;
 
-use yii\db\ActiveQuery;
-
 /**
  * Class for applying filters on query which works with orders
  */
 class OrderFilter
 {
+    private $params;
     public $status;
     public $service_id;
     public $mode;
     public $searchQuery;
     public $searchColumn;
-    private bool $doJoin;
+    private bool $doJoin = false;
 
     public function __construct($params = [])
     {
@@ -23,6 +22,7 @@ class OrderFilter
                 $this->$key = $value;
             }
         }
+        $this->params = $params;
     }
 
     /**
@@ -82,5 +82,10 @@ class OrderFilter
         }
 
         $query->andWhere(['or', ...$searchConditions]);
+    }
+
+    public function toArray()
+    {
+        return $this->params;
     }
 }

@@ -2,12 +2,7 @@
 
 namespace app\modules\orders\models;
 
-use app\modules\orders\models\OrderFilter;
-use app\modules\orders\models\Service;
-use app\modules\orders\models\User;
 use Yii;
-use yii\data\ActiveDataProvider;
-use yii\data\Pagination;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 
