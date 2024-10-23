@@ -5,15 +5,16 @@ namespace orders\widgets;
 use Yii;
 use yii\base\Widget;
 
+/**
+ * Download Button Widget
+ */
 class DownloadButton extends Widget
 {
     public $exportPath;
     public const BUTTON_TEXT = 'Download';
 
     /**
-     * Renders the widget.
-     *
-     * @return string
+     * @inheritDoc
      */
     public function run(): string
     {

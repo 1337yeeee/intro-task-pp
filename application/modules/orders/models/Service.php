@@ -7,6 +7,9 @@ use yii\db\ActiveRecord;
 
 class Service extends ActiveRecord
 {
+    /**
+     * @inheritDoc
+     */
     public static function tableName()
     {
         return 'services';

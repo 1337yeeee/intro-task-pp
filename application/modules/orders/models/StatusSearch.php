@@ -4,6 +4,9 @@ namespace orders\models;
 
 use Yii;
 
+/**
+ * Represents statuses for order search
+ */
 class StatusSearch
 {
     public const STATUSES = [

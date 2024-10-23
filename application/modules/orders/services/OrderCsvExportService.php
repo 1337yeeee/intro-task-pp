@@ -12,6 +12,7 @@ class OrderCsvExportService
     /**
      * Exports a CSV file with filtered data
      *
+     * @param array $params
      * @return void
      */
     public function exportToCsv(array $params): void

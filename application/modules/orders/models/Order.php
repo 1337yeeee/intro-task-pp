@@ -97,11 +97,21 @@ class Order extends ActiveRecord
         return '';
     }
 
+    /**
+     * Returns statuses which may be  set to order
+     *
+     * @return string[]
+     */
     public function getStatuses(): array
     {
         return self::STATUSES;
     }
 
+    /**
+     * Returns modes which may be set to order
+     *
+     * @return array
+     */
     public function getModes(): array
     {
         return array_map(function ($value) {

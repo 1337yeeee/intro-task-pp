@@ -4,6 +4,9 @@ namespace orders\models;
 
 use Yii;
 
+/**
+ * Model represents modes of order
+ */
 class ModeSearch
 {
     public const MODES = [

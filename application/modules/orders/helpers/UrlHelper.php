@@ -5,8 +5,18 @@ namespace orders\helpers;
 use Yii;
 use yii\helpers\Url;
 
+/**
+ * Contains method to create a URL with passed parameter
+ */
 class UrlHelper
 {
+    /**
+     * Returns an url with params to orders page
+     *
+     * @param $param string a parameter to be set
+     * @param $value mixed value of the parameter
+     * @return string
+     */
     public static function createUrlWithParam($param, $value): string
     {
         $params = Yii::$app->request->getQueryParams();
