@@ -15,6 +15,8 @@ class OrdersSearchForm extends Widget
     private static $searchModel;
     private static $currentStatus;
 
+    public const TEXT_INPUT_PLACEHOLDER = 'Search orders';
+
     public static function widget($config = [])
     {
         self::$searchModel = $config['searchModel'];
@@ -55,15 +57,11 @@ class OrdersSearchForm extends Widget
 
         echo '<div class="input-group">';
 
-        echo Html::textInput('search', self::$searchModel->search, ['class' => 'form-control', 'placeholder' => Yii::t('app', 'Search orders')]);
+        echo Html::textInput('search', self::$searchModel->search, ['class' => 'form-control', 'placeholder' => Yii::t('app', self::TEXT_INPUT_PLACEHOLDER)]);
 
         echo '<span class="input-group-btn search-select-wrap">';
 
-        echo Html::dropDownList('search_type', self::$searchModel->search_type, [
-            '0' => Yii::t('app', 'Order ID'),
-            '1' => Yii::t('app', 'Link'),
-            '2' => Yii::t('app', 'Username'),
-        ], ['class' => 'form-control search-select']);
+        echo Html::dropDownList('search_type', self::$searchModel->search_type, self::$searchModel->getSearchTypes(), ['class' => 'form-control search-select']);
 
         echo Html::submitButton('<span class="glyphicon glyphicon-search"></span>', ['class' => 'btn btn-default']);
 

@@ -17,6 +17,20 @@ class OrderSearch extends Order
     public $search_type = 0;
     public $page;
 
+    public const SEARCH_TYPE_ID = 0;
+    public const SEARCH_TYPE_ID_LABEL = 'Order ID';
+    public const SEARCH_TYPE_LINK = 1;
+    public const SEARCH_TYPE_LINK_LABEL = 'Link';
+    public const SEARCH_TYPE_USERNAME = 2;
+    public const SEARCH_TYPE_USERNAME_LABEL = 'Username';
+
+    public const ID_LABEL = 'ID';
+    public const USER_LABEL = 'User';
+    public const LINK_LABEL = 'Link';
+    public const QUANTITY_LABEL = 'Quantity';
+    public const STATUS_LABEL = 'Status';
+    public const CREATED_AT_LABEL = 'Created';
+
     /**
      * @inheritdoc
      */
@@ -181,5 +195,19 @@ class OrderSearch extends Order
     public function attributes(): array
     {
         return array_merge(parent::attributes(), ['search', 'search_type']);
+    }
+
+    /**
+     * Returns translated types of search
+     *
+     * @return array
+     */
+    public function getSearchTypes(): array
+    {
+        return [
+            self::SEARCH_TYPE_ID => Yii::t('app', self::SEARCH_TYPE_ID_LABEL),
+            self::SEARCH_TYPE_LINK => Yii::t('app', self::SEARCH_TYPE_LINK_LABEL),
+            self::SEARCH_TYPE_USERNAME => Yii::t('app', self::SEARCH_TYPE_USERNAME_LABEL),
+        ];
     }
 }

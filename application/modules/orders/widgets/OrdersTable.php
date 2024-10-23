@@ -51,21 +51,21 @@ class OrdersTable extends GridView
         return [
             [
                 'attribute' => 'id',
-                'label' => Yii::t('app', 'ID'),
+                'label' => Yii::t('app', self::$searchModel::ID_LABEL),
             ],
             [
-                'label' => Yii::t('app', 'User'),
+                'label' => Yii::t('app', self::$searchModel::USER_LABEL),
                 'value' => function ($model) {
                     return $model->user->first_name . ' ' . $model->user->last_name;
                 }
             ],
             [
                 'attribute' => 'link',
-                'label' => Yii::t('app', 'Link'),
+                'label' => Yii::t('app', self::$searchModel::LINK_LABEL),
             ],
             [
                 'attribute' => 'quantity',
-                'label' => Yii::t('app', 'Quantity'),
+                'label' => Yii::t('app', self::$searchModel::QUANTITY_LABEL),
             ],
             [
                 'attribute' => 'service_id',
@@ -79,7 +79,7 @@ class OrdersTable extends GridView
             ],
             [
                 'attribute' => 'status',
-                'label' => Yii::t('app', 'Status'),
+                'label' => Yii::t('app', self::$searchModel::STATUS_LABEL),
                 'value' => function ($model) {
                     return $model->getStatus();
                 }
@@ -95,7 +95,7 @@ class OrdersTable extends GridView
             ],
             [
                 'attribute' => 'created_at',
-                'label' => Yii::t('app', 'Created'),
+                'label' => Yii::t('app', self::$searchModel::CREATED_AT_LABEL),
                 'format' => ['date', 'php:Y-m-d H:i:s'],
             ],
         ];

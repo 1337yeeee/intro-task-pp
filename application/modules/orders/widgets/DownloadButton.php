@@ -8,7 +8,7 @@ use yii\base\Widget;
 class DownloadButton extends Widget
 {
     public $exportPath;
-    public $buttonText;
+    public const BUTTON_TEXT = 'Download';
 
     /**
      * Renders the widget.
@@ -27,14 +27,11 @@ class DownloadButton extends Widget
      */
     protected function renderButton(): string
     {
-        if (!isset($this->buttonText)) {
-            $this->buttonText = Yii::t('app', 'Download');
-        }
         return '
             <div class="row">
                 <div class="col-sm-12 text-right">
                     <a href="' . ($this->exportPath ?? '#') . '" class="btn btn-primary">
-                        ' . $this->buttonText . '
+                        ' . Yii::t('app', self::BUTTON_TEXT) . '
                     </a>
                 </div>
             </div>

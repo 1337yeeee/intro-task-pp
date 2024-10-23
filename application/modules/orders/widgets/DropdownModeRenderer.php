@@ -11,6 +11,8 @@ use Yii;
 class DropdownModeRenderer
 {
 
+    public const NAME = 'Mode';
+
     /**
      * Renders drop down list of available modes
      *
@@ -20,15 +22,9 @@ class DropdownModeRenderer
      */
     public static function render($searchModel, $currentMode): string
     {
-        $validModes = ['0' => 'Manual', '1' => 'Auto'];
-
-        if (!array_key_exists($currentMode, $validModes)) {
-            $currentMode = '';
-        }
-
         $html = '<div class="dropdown">
                 <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    ' . Yii::t('app', 'Mode') . '
+                    ' . Yii::t('app', self::NAME) . '
                     <span class="caret"></span>
                 </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">';

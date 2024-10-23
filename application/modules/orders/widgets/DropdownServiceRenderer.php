@@ -11,6 +11,8 @@ use Yii;
 class DropdownServiceRenderer
 {
 
+    public const NAME = 'Service';
+
     /**
      * Renders drop down list of available services
      *
@@ -22,7 +24,7 @@ class DropdownServiceRenderer
     {
         $dropdownHtml = '<div class="dropdown">
             <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                ' . Yii::t('app', 'Service') . '
+                ' . Yii::t('app', self::NAME) . '
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">';

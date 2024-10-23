@@ -10,6 +10,9 @@ use yii\base\Widget;
  */
 class NavbarHeader extends Widget
 {
+
+    public const NAME = 'Orders';
+
     /**
      * @inheritDoc
      */
@@ -39,7 +42,7 @@ class NavbarHeader extends Widget
                 </div>
                 <div class="collapse navbar-collapse" id="bs-navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">' . Yii::t('app', 'Orders') . '</a></li>
+                        <li class="active"><a href="#">' . Yii::t('app', self::NAME) . '</a></li>
                     </ul>
                 </div>
             </div>
