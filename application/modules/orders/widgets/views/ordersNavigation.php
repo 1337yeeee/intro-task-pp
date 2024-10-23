@@ -4,7 +4,7 @@
 
 /** @var $currentStatus */
 
-use app\modules\orders\widgets\OrdersSearchForm;
+use orders\widgets\OrdersSearchForm;
 
 ?>
 

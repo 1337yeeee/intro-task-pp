@@ -1,8 +1,8 @@
 <?php
 
-namespace app\modules\orders\services;
+namespace orders\services;
 
-use app\modules\orders\models\OrderSearch;
+use orders\models\OrderSearch;
 
 /**
  * Service for exporting filtered orders in a csv file

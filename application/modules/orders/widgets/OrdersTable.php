@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\orders\widgets;
+namespace orders\widgets;
 
 use Yii;
 use yii\grid\GridView;
@@ -63,7 +63,8 @@ class OrdersTable extends GridView
             ],
             [
                 'attribute' => 'service_id',
-                'header' => self::renderDropdownService($servicesList),
+                'header' => DropdownServiceRenderer::render($servicesList, Yii::$app->request->get('service_id', '')),
+//                'header' => self::renderDropdownService($servicesList),
                 'headerOptions' => ['class' => 'dropdown-th'],
                 'encodeLabel' => false,
                 'value' => function ($model) {

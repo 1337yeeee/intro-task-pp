@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\orders\services;
+namespace orders\services;
 
 use yii\data\Pagination;
 use yii\web\Request;

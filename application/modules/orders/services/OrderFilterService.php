@@ -1,9 +1,9 @@
 <?php
 
 
-namespace app\modules\orders\services;
+namespace orders\services;
 
-use app\modules\orders\models\OrderSearch;
+use orders\models\OrderSearch;
 use yii\data\Pagination;
 
 /**

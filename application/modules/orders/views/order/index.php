@@ -6,12 +6,12 @@
 
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-/** @var app\modules\orders\models\OrderSearch $searchModel */
+/** @var orders\models\OrderSearch $searchModel */
 
-use app\modules\orders\widgets\OrdersTable;
-use app\modules\orders\widgets\NavbarHeader;
-use app\modules\orders\widgets\OrdersNavigation;
-use app\modules\orders\widgets\DownloadButton;
+use orders\widgets\OrdersTable;
+use orders\widgets\NavbarHeader;
+use orders\widgets\OrdersNavigation;
+use orders\widgets\DownloadButton;
 
 ?>
 

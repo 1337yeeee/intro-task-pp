@@ -2,10 +2,9 @@
 
 namespace orders\controllers;
 
-use app\modules\orders\models\Order;
-use app\modules\orders\services\OrderCsvExportService;
-use app\modules\orders\services\OrderFilterService;
-use app\modules\orders\services\OrderPaginationService;
+use orders\services\OrderCsvExportService;
+use orders\services\OrderFilterService;
+use orders\services\OrderPaginationService;
 use yii\helpers\Url;
 use Yii;
 use yii\web\Controller;

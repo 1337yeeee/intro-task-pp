@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\orders\models;
+namespace orders\models;
 
 /**
  * Class for applying filters on query which works with orders
