@@ -32,6 +32,3 @@ use orders\widgets\DownloadButton;
         'exportPath' => $exportPath,
     ]); ?>
 </div>
-
-<script src="/js/jquery.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>

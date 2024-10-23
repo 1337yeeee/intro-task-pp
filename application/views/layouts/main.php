@@ -35,6 +35,10 @@ $this->registerCss('.label-default {border: 1px solid #ddd;background: none;colo
 <?= $content ?>
 
 <?php $this->endBody() ?>
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+
 </body>
 </html>
 <?php $this->endPage() ?>
