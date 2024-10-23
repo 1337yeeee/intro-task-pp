@@ -22,6 +22,7 @@ class OrdersNavigation extends Widget
         return $this->render('ordersNavigation', [
             'statuses' => $this->searchModel->getStatusModel()->getStatuses(),
             'currentStatus' => Yii::$app->request->get('status', ''),
+            'searchModel' => $this->searchModel,
         ]);
     }
 

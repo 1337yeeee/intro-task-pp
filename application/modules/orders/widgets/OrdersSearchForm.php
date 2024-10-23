@@ -12,18 +12,17 @@ use yii\widgets\ActiveForm;
  */
 class OrdersSearchForm extends Widget
 {
-    public $search;
-    public $searchType;
+    private static $searchModel;
+    private static $currentStatus;
 
-    /**
-     * @inheritDoc
-     */
-    public function init()
+    public static function widget($config = [])
     {
-        parent::init();
-        // Using default values if variables hadn't been set
-        $this->search = $this->search ?? Yii::$app->request->get('search', '');
-        $this->searchType = $this->searchType ?? Yii::$app->request->get('search_type', '0');
+        self::$searchModel = $config['searchModel'];
+        self::$currentStatus = $config['currentStatus'];
+        unset($config['searchModel']);
+        unset($config['currentStatus']);
+        return parent::widget($config);
+
     }
 
     /**
@@ -43,12 +42,12 @@ class OrdersSearchForm extends Widget
      */
     private function renderForm()
     {
-        $status = Yii::$app->request->get('status', '');
+        $status = self::$currentStatus;
         if ($status) {
             $status = '/' . $status;
         }
 
-        $form = ActiveForm::begin([
+        ActiveForm::begin([
             'action' => ['/orders' . $status],
             'method' => 'get',
             'options' => ['class' => 'form-inline'],
@@ -56,11 +55,11 @@ class OrdersSearchForm extends Widget
 
         echo '<div class="input-group">';
 
-        echo Html::textInput('search', $this->search, ['class' => 'form-control', 'placeholder' => Yii::t('app', 'Search orders')]);
+        echo Html::textInput('search', self::$searchModel->search, ['class' => 'form-control', 'placeholder' => Yii::t('app', 'Search orders')]);
 
         echo '<span class="input-group-btn search-select-wrap">';
 
-        echo Html::dropDownList('search_type', $this->searchType, [
+        echo Html::dropDownList('search_type', self::$searchModel->search_type, [
             '0' => Yii::t('app', 'Order ID'),
             '1' => Yii::t('app', 'Link'),
             '2' => Yii::t('app', 'Username'),

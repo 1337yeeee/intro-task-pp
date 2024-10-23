@@ -64,7 +64,6 @@ class OrdersTable extends GridView
             [
                 'attribute' => 'service_id',
                 'header' => DropdownServiceRenderer::render($servicesList, Yii::$app->request->get('service_id', '')),
-//                'header' => self::renderDropdownService($servicesList),
                 'headerOptions' => ['class' => 'dropdown-th'],
                 'encodeLabel' => false,
                 'value' => function ($model) {
@@ -75,14 +74,13 @@ class OrdersTable extends GridView
             [
                 'attribute' => 'status',
                 'label' => Yii::t('app', 'Status'),
-                'filter' => self::$searchModel->getStatuses(),
                 'value' => function ($model) {
                     return $model->getStatus();
                 }
             ],
             [
                 'attribute' => 'mode',
-                'header' => self::renderDropdownMode(),
+                'header' => DropdownModeRenderer::render(self::$searchModel, Yii::$app->request->get('mode')),
                 'headerOptions' => ['class' => 'dropdown-th'],
                 'encodeLabel' => false,
                 'value' => function ($model) {
@@ -96,107 +94,4 @@ class OrdersTable extends GridView
             ],
         ];
     }
-
-    /**
-     * Renders drop down header for services
-     *
-     * @param $servicesList
-     * @return string
-     */
-    private static function renderDropdownService($servicesList): string
-    {
-        $dropdownHtml = '<div class="dropdown">
-            <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                ' . Yii::t('app', 'Service') . '
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">';
-
-        $currentServiceId = Yii::$app->request->get('service_id', '');
-
-        $headRow = '';
-        $rows = '';
-        foreach ($servicesList as $service) {
-            $active = $currentServiceId === (string)$service['id'] ? 'active' : '';
-            $url = self::createUrlWithParam('service_id', (string)$service['id']);
-            if ($service['name']) {
-                $rows .= '<li><a ' . $active . ' href="' . $url . '"><span class="label-id">' . $service['order_count'] . '</span> ' . $service['name'] . '</a></li>';
-            } else {
-                $headRow = '<li class="' . $active . '"><a href="' . $url . '">' . Yii::t('app', 'All') . ' (' . $service['order_count'] . ')</a></li>';
-            }
-        }
-
-        $dropdownHtml .= $headRow . $rows . '</ul></div>';
-
-        return $dropdownHtml;
-    }
-
-    /**
-     *  Renders drop down header for modes
-     *
-     * @return string
-     */
-    private static function renderDropdownMode(): string
-    {
-        $currentMode = Yii::$app->request->get('mode', '');
-
-        $validModes = ['0' => 'Manual', '1' => 'Auto'];
-
-        if (!array_key_exists($currentMode, $validModes)) {
-            $currentMode = '';
-        }
-
-        $html = '<div class="dropdown">
-                <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    ' . Yii::t('app', 'Mode') . '
-                    <span class="caret"></span>
-                </button>
-              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">';
-
-        $modes = self::$searchModel->getModeModel()->getModes();
-
-        foreach ($modes as $key => $mode) {
-            $active = $currentMode === $key ? 'active' : '';
-            $href = self::createUrlWithParam('mode', $key);
-            $html .= <<<HTML
-            <li class="{$active}">
-                <a href="{$href}">{$mode}</a>
-            </li>
-            HTML;
-        }
-
-        $html .= '</ul></div>';
-
-        return $html;
-    }
-
-    /**
-     * Creates a URL with passed params
-     *
-     * @param $param
-     * @param $value
-     * @return string
-     */
-    private static function createUrlWithParam($param, $value): string
-    {
-        $params = Yii::$app->request->getQueryParams();
-
-        if ($value === '') {
-            unset($params[$param]);
-        } else {
-            $params[$param] = $value;
-        }
-
-        $params['page'] = 1;
-
-        $status = $params['status'] ?? null;
-        unset($params['status']);
-
-        if ($status) {
-            return Url::to(array_merge(['/orders/' . $status], $params));
-        }
-
-        return Url::to(array_merge(['/orders'], $params));
-    }
-
 }

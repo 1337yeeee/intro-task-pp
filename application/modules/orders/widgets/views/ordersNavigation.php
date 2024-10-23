@@ -2,8 +2,11 @@
 
 /** @var array $statuses */
 
+/** @var OrderSearch $searchModel */
+
 /** @var $currentStatus */
 
+use orders\models\OrderSearch;
 use orders\widgets\OrdersSearchForm;
 
 ?>
@@ -15,6 +18,9 @@ use orders\widgets\OrdersSearchForm;
         </li>
     <?php endforeach; ?>
     <li class="pull-right custom-search">
-        <?= OrdersSearchForm::widget() ?>
+        <?= OrdersSearchForm::widget([
+            'searchModel' => $searchModel,
+            'currentStatus' => $currentStatus,
+        ]) ?>
     </li>
 </ul>
