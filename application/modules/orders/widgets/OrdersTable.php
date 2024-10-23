@@ -31,6 +31,12 @@ class OrdersTable extends GridView
             'dataProvider' => $dataProvider,
             'layout' => "{items}\n{$layoutPages}",
             'columns' => self::getColumns($config['servicesList']),
+            'options' => [
+                'tag' => false,
+            ],
+            'tableOptions' => [
+                'class' => 'table order-table',
+            ],
         ]);
     }
 
