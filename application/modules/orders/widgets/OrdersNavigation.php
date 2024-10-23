@@ -20,8 +20,8 @@ class OrdersNavigation extends Widget
     public function run(): string
     {
         return $this->render('ordersNavigation', [
-            'statuses' => $this->searchModel->getStatuses(),
-            'currentStatus' => Yii::$app->request->get('status', null),
+            'statuses' => $this->searchModel->getStatusModel()->getStatuses(),
+            'currentStatus' => Yii::$app->request->get('status', ''),
         ]);
     }
 
@@ -35,10 +35,10 @@ class OrdersNavigation extends Widget
         $newParams = [];
 
         if (isset($params['search'])) {
-            $newParams['search'] = $params['search'] ?? null;
+            $newParams['search'] = $params['search'];
         }
-        if (isset($params['status'])) {
-            $newParams['search_type'] = $params['search_type'] ?? null;
+        if (isset($params['search_type'])) {
+            $newParams['search_type'] = $params['search_type'];
         }
 
         if ($status) {

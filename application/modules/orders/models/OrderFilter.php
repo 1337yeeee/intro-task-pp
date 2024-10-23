@@ -11,15 +11,17 @@ class OrderFilter
     public $status;
     public $service_id;
     public $mode;
-    public $searchQuery;
-    public $searchColumn;
-    private bool $doJoin = false;
+    public $search;
+    public $search_type;
+    private bool $doJoin = true;
 
-    public function __construct($params = [])
+    public function __construct(OrderSearch $searchModel, array $ignore = [])
     {
-        foreach ($params as $key => $value) {
+        $params = [];
+        foreach ($searchModel->getAttributes(null, $ignore) as $key => $value) {
             if (property_exists($this, $key)) {
                 $this->$key = $value;
+                $params[$key] = $value;
             }
         }
         $this->params = $params;
@@ -53,7 +55,7 @@ class OrderFilter
         if ($this->mode !== null) {
             $query->andWhere(['orders.mode' => $this->mode]);
         }
-        if ($this->searchQuery !== null) {
+        if ($this->search !== null) {
             $this->applySearch($query);
         }
     }
@@ -70,21 +72,25 @@ class OrderFilter
             $query->joinWith(['user', 'service']);
         }
 
-
         $searchConditions = [];
-        if ($this->searchColumn === 'link') {
-            $searchConditions[] = ['like', 'orders.link', $this->searchQuery];
-        } elseif ($this->searchColumn === 'users') {
-            $searchConditions[] = ['like', 'users.first_name', $this->searchQuery];
-            $searchConditions[] = ['like', 'users.last_name', $this->searchQuery];
+        if ($this->search_type === '1') {
+            $searchConditions[] = ['like', 'orders.link', $this->search];
+        } elseif ($this->search_type === '2') {
+            $searchConditions[] = ['like', 'users.first_name', $this->search];
+            $searchConditions[] = ['like', 'users.last_name', $this->search];
         } else {
-            $searchConditions[] = ['like', 'orders.id', $this->searchQuery];
+            $searchConditions[] = ['like', 'orders.id', $this->search];
         }
 
         $query->andWhere(['or', ...$searchConditions]);
     }
 
-    public function toArray()
+    /**
+     * Returns params of a filter as array string => value
+     *
+     * @return array
+     */
+    public function toArray(): array
     {
         return $this->params;
     }

@@ -18,12 +18,25 @@ class Order extends ActiveRecord
     ];
 
     private const STATUSES = [
-        0 => 'Pending',
-        1 => 'In progress',
-        2 => 'Completed',
-        3 => 'Canceled',
-        4 => 'Error',
+        0 => 'pending',
+        1 => 'inprogress',
+        2 => 'completed',
+        3 => 'canceled',
+        4 => 'error',
     ];
+
+    /**
+     * @inheritdoc
+     */
+    public function rules(): array
+    {
+        return [
+            [['status', 'service_id', 'mode'], 'safe'],
+            ['status', 'in', 'range' => array_keys(self::STATUSES)],
+            ['mode', 'in', 'range' => array_keys(self::MODES)],
+            ['service_id', 'integer'],
+        ];
+    }
 
     /**
      * @inheritDoc
@@ -78,7 +91,7 @@ class Order extends ActiveRecord
     {
         $statusValue = $this->getAttribute('status');
         if (isset(self::STATUSES[$statusValue])) {
-            return Yii::t('app', self::STATUSES[$statusValue]);
+            return self::STATUSES[$statusValue];
         }
 
         return '';
@@ -86,14 +99,12 @@ class Order extends ActiveRecord
 
     public function getStatuses(): array
     {
-        return array_map(function ($value) {
-            return Yii::t('app', $value);
-        }, self::STATUSES);
+        return self::STATUSES;
     }
 
     public function getModes(): array
     {
-        return array_map(function ($key, $value) {
+        return array_map(function ($value) {
             return Yii::t('app', $value);
         }, self::MODES);
     }

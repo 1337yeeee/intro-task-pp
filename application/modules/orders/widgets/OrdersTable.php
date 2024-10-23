@@ -4,7 +4,7 @@ namespace app\modules\orders\widgets;
 
 use Yii;
 use yii\grid\GridView;
-use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
  * Widget for displaying orders
@@ -113,13 +113,19 @@ class OrdersTable extends GridView
 
         $currentServiceId = Yii::$app->request->get('service_id', '');
 
-        $dropdownHtml .= '<li class="' . ($currentServiceId === '' ? 'active' : '') . '"><a href="' . self::createUrlWithParam('service_id', '') . '">' . Yii::t('app', 'All') . ' (894931)</a></li>';
-
+        $headRow = '';
+        $rows = '';
         foreach ($servicesList as $service) {
-            $dropdownHtml .= '<li><a ' . ($currentServiceId === (string)$service['id'] ? 'active' : '') . ' href="' . self::createUrlWithParam('service_id', $service['id']) . '"><span class="label-id">' . $service['order_count'] . '</span> ' . $service['name'] . '</a></li>';
+            $active = $currentServiceId === (string)$service['id'] ? 'active' : '';
+            $url = self::createUrlWithParam('service_id', (string)$service['id']);
+            if ($service['name']) {
+                $rows .= '<li><a ' . $active . ' href="' . $url . '"><span class="label-id">' . $service['order_count'] . '</span> ' . $service['name'] . '</a></li>';
+            } else {
+                $headRow = '<li class="' . $active . '"><a href="' . $url . '">' . Yii::t('app', 'All') . ' (' . $service['order_count'] . ')</a></li>';
+            }
         }
 
-        $dropdownHtml .= '</ul></div>';
+        $dropdownHtml .= $headRow . $rows . '</ul></div>';
 
         return $dropdownHtml;
     }
@@ -146,15 +152,14 @@ class OrdersTable extends GridView
                 </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">';
 
-        $modes = self::$searchModel->getModes();
+        $modes = self::$searchModel->getModeModel()->getModes();
 
         foreach ($modes as $key => $mode) {
             $active = $currentMode === $key ? 'active' : '';
             $href = self::createUrlWithParam('mode', $key);
-            $modeName = $mode;
             $html .= <<<HTML
             <li class="{$active}">
-                <a href="{$href}">{$modeName}</a>
+                <a href="{$href}">{$mode}</a>
             </li>
             HTML;
         }
@@ -183,7 +188,14 @@ class OrdersTable extends GridView
 
         $params['page'] = 1;
 
-        return Yii::$app->urlManager->createUrl(['orders'] + $params);
+        $status = $params['status'] ?? null;
+        unset($params['status']);
+
+        if ($status) {
+            return Url::to(array_merge(['/orders/' . $status], $params));
+        }
+
+        return Url::to(array_merge(['/orders'], $params));
     }
 
 }

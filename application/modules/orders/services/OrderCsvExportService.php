@@ -14,7 +14,7 @@ class OrderCsvExportService
      *
      * @return void
      */
-    public function exportToCsv(): void
+    public function exportToCsv(array $params): void
     {
         $this->setCsvHeaders();
 
@@ -22,10 +22,8 @@ class OrderCsvExportService
         fputcsv($output, $this->getCsvHeaders());
 
         $searchModel = new OrderSearch();
-        $filterService = new OrderFilterService();
-        $ordersFilter = $filterService->getFilter();
 
-        foreach ($searchModel->getRecentOrdersBatch(10, $ordersFilter) as $ordersBatch) {
+        foreach ($searchModel->getRecentOrdersBatch(10, $params) as $ordersBatch) {
             foreach ($ordersBatch as $order) {
                 fputcsv($output, $this->getOrderForCSV($order));
                 flush();

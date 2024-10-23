@@ -2,6 +2,7 @@
 
 namespace orders\controllers;
 
+use app\modules\orders\models\Order;
 use app\modules\orders\services\OrderCsvExportService;
 use app\modules\orders\services\OrderFilterService;
 use app\modules\orders\services\OrderPaginationService;
@@ -27,12 +28,12 @@ class OrderController extends Controller
      */
     public function actionIndex(?string $status = null): string
     {
-        $route = self::INDEX_ROUTE . '/' . ($status ?: self::DEFAULT_ROUTE);
+        $route = self::INDEX_ROUTE . ($status ? '/' . $status : '');
         $paginationService = new OrderPaginationService(Yii::$app->request, self::DEFAULT_LIMIT, self::DEFAULT_PAGE, $route);
         $pagination = $paginationService->getPagination();
 
         $filterService = new OrderFilterService();
-        $filteredOrders = $filterService->getFilteredOrders($pagination);
+        $filteredOrders = $filterService->getFilteredOrders(Yii::$app->request->queryParams, $pagination);
 
         $exportPath = Url::to(array_merge(['order/csv'], Yii::$app->request->queryParams));
 
@@ -50,7 +51,7 @@ class OrderController extends Controller
     public function actionCsv()
     {
         $csvExportService = new OrderCsvExportService();
-        $csvExportService->exportToCsv();
+        $csvExportService->exportToCsv(Yii::$app->request->queryParams);
         exit;
     }
 }

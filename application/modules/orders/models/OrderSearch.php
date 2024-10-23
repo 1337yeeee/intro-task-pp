@@ -13,24 +13,9 @@ use yii\db\ActiveRecord;
  */
 class OrderSearch extends Order
 {
-    public string $search = '';
-    public int $search_type = 0;
+    public $search = '';
+    public $search_type = 0;
     public $page;
-
-    private const STATUSES = [
-        '' => 'All orders',
-        'pending' => 'Pending',
-        'inprogress' => 'In progress',
-        'completed' => 'Completed',
-        'canceled' => 'Canceled',
-        'error' => 'Error',
-    ];
-
-    private const MODES = [
-        '' => 'All',
-        '0' => 'Manual',
-        '1' => 'Auto',
-    ];
 
     /**
      * @inheritdoc
@@ -39,13 +24,29 @@ class OrderSearch extends Order
     {
         return [
             [['status', 'search', 'search_type', 'service_id', 'page', 'mode'], 'safe'],
-            ['status', 'in', 'range' => array_keys(self::STATUSES)],
-            ['mode', 'in', 'range' => array_keys(self::MODES)],
+            ['status', 'in', 'range' => array_keys($this->getStatuses())],
+            ['mode', 'in', 'range' => array_keys($this->getModeModel()::MODES)],
             ['service_id', 'integer'],
             ['page', 'integer', 'min' => 1],
             ['search_type', 'integer'],
             ['search', 'string'],
         ];
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @return bool
+     */
+    public function beforeValidate(): bool
+    {
+        $statuses = $this->getStatuses();
+
+        if (isset($this->status) && is_string($this->status)) {
+            $this->status = array_search($this->status, $statuses, true);
+        }
+
+        return parent::beforeValidate();
     }
 
     /**
@@ -59,11 +60,11 @@ class OrderSearch extends Order
     /**
      * Search orders with passed filters and pagination
      *
-     * @param Pagination $pagination
-     * @param OrderFilter|null $filter
+     * @param array $params
+     * @param Pagination|null $pagination
      * @return ActiveDataProvider
      */
-    public function search(Pagination $pagination, ?OrderFilter $filter = null): ActiveDataProvider
+    public function search(array $params, Pagination $pagination): ActiveDataProvider
     {
         $query = self::find()
             ->joinWith(['service', 'user'])
@@ -76,7 +77,8 @@ class OrderSearch extends Order
             'pagination' => $pagination,
         ]);
 
-        if ($filter !== null) {
+        if ($this->load($params, '') and $this->validate()) {
+            $filter = new OrderFilter($this);
             $filter->applyFilters($query);
         }
 
@@ -86,18 +88,22 @@ class OrderSearch extends Order
     /**
      * Returns the list of services and their quantities given the filters
      *
-     * @param OrderFilter|null $filter
+     * @param array $params
      * @return array|ActiveRecord[]
      */
-    public static function getServicesOfOrders(?OrderFilter $filter = null): array
+    public function getServicesOfOrders(array $params): array
     {
         $query = self::find()
             ->joinWith('service')
             ->select(['services.name', 'services.id', 'COUNT(orders.id) as order_count'])
-            ->groupBy(['services.name', 'services.id'])
+            ->groupBy(new \yii\db\Expression('`services`.`name`, `services`.`id` WITH ROLLUP'))
+            ->having('services.id IS NOT NULL OR services.name IS NULL')
             ->orderBy(['order_count' => SORT_DESC]);
 
-        $filter->applyFilters($query);
+        if ($this->load($params, '') and $this->validate()) {
+            $filter = new OrderFilter($this, ['service_id']);
+            $filter->applyFilters($query);
+        }
 
         return $query->asArray()->all();
     }
@@ -105,14 +111,17 @@ class OrderSearch extends Order
     /**
      * Get count of filtered orders
      *
-     * @param OrderFilter|null $filter
+     * @param array $params
      * @return bool|int|string|null
      */
-    public static function getCount(?OrderFilter $filter = null)
+    public function getCount(array $params)
     {
         $query = self::find();
 
-        if ($filter !== null) $filter->applyFilters($query);
+        if ($this->load($params, '') and $this->validate()) {
+            $filter = new OrderFilter($this);
+            $filter->applyFilters($query);
+        }
 
         return $query->count();
     }
@@ -124,7 +133,7 @@ class OrderSearch extends Order
      * @param OrderFilter|null $filter
      * @return \Generator
      */
-    public function getRecentOrdersBatch(int $batchSize = 100, ?OrderFilter $filter = null): \Generator
+    public function getRecentOrdersBatch(int $batchSize = 100, array $params = []): \Generator
     {
         $query = (new \yii\db\Query())
             ->select([
@@ -137,7 +146,8 @@ class OrderSearch extends Order
             ->join('LEFT JOIN', 'users', 'users.id = orders.user_id')
             ->orderBy(['orders.id' => SORT_DESC]);
 
-        if ($filter !== null) {
+        if ($this->load($params, '') and $this->validate()) {
+            $filter = new OrderFilter($this);
             $filter->setDoJoin(false);
             $filter->applyFilters($query);
         }
@@ -148,26 +158,28 @@ class OrderSearch extends Order
     }
 
     /**
-     * Returns the available statuses for orders.
-     *
-     * @return array
+     * Provides a ModeSearch model
      */
-    public function getStatuses(): array
+    public function getModeModel(): ModeSearch
     {
-        return array_map(function ($value) {
-            return Yii::t('app', $value);
-        }, self::STATUSES);
+        return new ModeSearch();
     }
 
     /**
-     * Returns the available modes for orders.
+     * Provides a StatusSearch model
      *
-     * @return array
+     * @return StatusSearch
      */
-    public function getModes(): array
+    public function getStatusModel(): StatusSearch
     {
-        return array_map(function ($value) {
-            return Yii::t('app', $value);
-        }, self::MODES);
+        return new StatusSearch();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributes(): array
+    {
+        return array_merge(parent::attributes(), ['search', 'search_type']);
     }
 }
