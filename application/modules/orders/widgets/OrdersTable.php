@@ -2,6 +2,7 @@
 
 namespace orders\widgets;
 
+use orders\helpers\OrderLabels;
 use Yii;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -51,25 +52,25 @@ class OrdersTable extends GridView
         return [
             [
                 'attribute' => 'id',
-                'label' => Yii::t('app', self::$searchModel::ID_LABEL),
+                'label' => OrderLabels::getLabel('id'),
             ],
             [
-                'label' => Yii::t('app', self::$searchModel::USER_LABEL),
+                'label' => OrderLabels::getLabel('user'),
                 'value' => function ($model) {
                     return $model->user->first_name . ' ' . $model->user->last_name;
                 }
             ],
             [
                 'attribute' => 'link',
-                'label' => Yii::t('app', self::$searchModel::LINK_LABEL),
+                'label' => OrderLabels::getLabel('link'),
             ],
             [
                 'attribute' => 'quantity',
-                'label' => Yii::t('app', self::$searchModel::QUANTITY_LABEL),
+                'label' => OrderLabels::getLabel('quantity'),
             ],
             [
                 'attribute' => 'service_id',
-                'header' => DropdownServiceRenderer::render($servicesList, Yii::$app->request->get('service_id', '')),
+                'header' => DropdownServiceRenderer::render($servicesList, self::$searchModel->search_id ?? ''),
                 'headerOptions' => ['class' => 'dropdown-th'],
                 'encodeLabel' => false,
                 'value' => function ($model) {
@@ -79,14 +80,14 @@ class OrdersTable extends GridView
             ],
             [
                 'attribute' => 'status',
-                'label' => Yii::t('app', self::$searchModel::STATUS_LABEL),
+                'label' => OrderLabels::getLabel('status'),
                 'value' => function ($model) {
                     return $model->getStatus();
                 }
             ],
             [
                 'attribute' => 'mode',
-                'header' => DropdownModeRenderer::render(self::$searchModel, Yii::$app->request->get('mode')),
+                'header' => DropdownModeRenderer::render(self::$searchModel, self::$searchModel->mode ?? ''),
                 'headerOptions' => ['class' => 'dropdown-th'],
                 'encodeLabel' => false,
                 'value' => function ($model) {
@@ -95,7 +96,7 @@ class OrdersTable extends GridView
             ],
             [
                 'attribute' => 'created_at',
-                'label' => Yii::t('app', self::$searchModel::CREATED_AT_LABEL),
+                'label' => OrderLabels::getLabel('created_at'),
                 'format' => ['date', 'php:Y-m-d H:i:s'],
             ],
         ];

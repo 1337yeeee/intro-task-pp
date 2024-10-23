@@ -2,7 +2,9 @@
 
 namespace orders\widgets;
 
+use orders\helpers\OrderLabels;
 use orders\helpers\UrlHelper;
+use orders\models\Service;
 use Yii;
 
 /**
@@ -11,7 +13,8 @@ use Yii;
 class DropdownServiceRenderer
 {
 
-    public const NAME = 'Service';
+    public const FIELD = 'service';
+    public const ALL_SERVICES = 'All';
 
     /**
      * Renders drop down list of available services
@@ -24,7 +27,7 @@ class DropdownServiceRenderer
     {
         $dropdownHtml = '<div class="dropdown">
             <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                ' . Yii::t('app', self::NAME) . '
+                ' . OrderLabels::getLabel(self::FIELD) . '
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">';
@@ -37,7 +40,7 @@ class DropdownServiceRenderer
             if ($service['name']) {
                 $rows .= '<li><a ' . $active . ' href="' . $url . '"><span class="label-id">' . $service['order_count'] . '</span> ' . $service['name'] . '</a></li>';
             } else {
-                $headRow = '<li class="' . $active . '"><a href="' . $url . '">' . Yii::t('app', 'All') . ' (' . $service['order_count'] . ')</a></li>';
+                $headRow = '<li class="' . $active . '"><a href="' . $url . '">' . Service::getAllServicesLabel() . ' (' . $service['order_count'] . ')</a></li>';
             }
         }
 

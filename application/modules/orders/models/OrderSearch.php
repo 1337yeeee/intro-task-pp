@@ -23,6 +23,7 @@ class OrderSearch extends Order
     public const SEARCH_TYPE_LINK_LABEL = 'Link';
     public const SEARCH_TYPE_USERNAME = 2;
     public const SEARCH_TYPE_USERNAME_LABEL = 'Username';
+    public const TEXT_INPUT_PLACEHOLDER = 'Search orders';
 
     public const ID_LABEL = 'ID';
     public const USER_LABEL = 'User';
@@ -39,7 +40,7 @@ class OrderSearch extends Order
         return [
             [['status', 'search', 'search_type', 'service_id', 'page', 'mode'], 'safe'],
             ['status', 'in', 'range' => array_keys($this->getStatuses())],
-            ['mode', 'in', 'range' => array_keys($this->getModeModel()::MODES)],
+            ['mode', 'in', 'range' => array_keys($this->getModes())],
             ['service_id', 'integer'],
             ['page', 'integer', 'min' => 1],
             ['search_type', 'integer'],
@@ -54,10 +55,8 @@ class OrderSearch extends Order
      */
     public function beforeValidate(): bool
     {
-        $statuses = $this->getStatuses();
-
         if (isset($this->status) && is_string($this->status)) {
-            $this->status = array_search($this->status, $statuses, true);
+            $this->status = Status::getStatusKey($this->status);
         }
 
         return parent::beforeValidate();
@@ -172,24 +171,6 @@ class OrderSearch extends Order
     }
 
     /**
-     * Provides a ModeSearch model
-     */
-    public function getModeModel(): ModeSearch
-    {
-        return new ModeSearch();
-    }
-
-    /**
-     * Provides a StatusSearch model
-     *
-     * @return StatusSearch
-     */
-    public function getStatusModel(): StatusSearch
-    {
-        return new StatusSearch();
-    }
-
-    /**
      * @inheritdoc
      */
     public function attributes(): array
@@ -209,5 +190,15 @@ class OrderSearch extends Order
             self::SEARCH_TYPE_LINK => Yii::t('app', self::SEARCH_TYPE_LINK_LABEL),
             self::SEARCH_TYPE_USERNAME => Yii::t('app', self::SEARCH_TYPE_USERNAME_LABEL),
         ];
+    }
+
+    /**
+     * Returns translated placeholder for search input
+     *
+     * @return string
+     */
+    public function getInputPlaceHolder(): string
+    {
+        return Yii::t('app', self::TEXT_INPUT_PLACEHOLDER);
     }
 }

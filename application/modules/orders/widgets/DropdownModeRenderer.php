@@ -2,6 +2,7 @@
 
 namespace orders\widgets;
 
+use orders\helpers\OrderLabels;
 use orders\helpers\UrlHelper;
 use Yii;
 
@@ -11,7 +12,7 @@ use Yii;
 class DropdownModeRenderer
 {
 
-    public const NAME = 'Mode';
+    public const FIELD = 'mode';
 
     /**
      * Renders drop down list of available modes
@@ -24,12 +25,12 @@ class DropdownModeRenderer
     {
         $html = '<div class="dropdown">
                 <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    ' . Yii::t('app', self::NAME) . '
+                    ' . OrderLabels::getLabel(self::FIELD) . '
                     <span class="caret"></span>
                 </button>
               <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">';
 
-        $modes = $searchModel->getModeModel()->getModes();
+        $modes = $searchModel->getModes();
 
         foreach ($modes as $key => $mode) {
             $active = $currentMode === $key ? 'active' : '';

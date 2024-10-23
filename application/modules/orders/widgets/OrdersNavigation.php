@@ -2,6 +2,7 @@
 
 namespace orders\widgets;
 
+use orders\models\Status;
 use Yii;
 use yii\base\Widget;
 use yii\helpers\Url;
@@ -20,7 +21,7 @@ class OrdersNavigation extends Widget
     public function run(): string
     {
         return $this->render('ordersNavigation', [
-            'statuses' => $this->searchModel->getStatusModel()->getStatuses(),
+            'statuses' => Status::getStatusesWithKeys(),
             'currentStatus' => Yii::$app->request->get('status', ''),
             'searchModel' => $this->searchModel,
         ]);

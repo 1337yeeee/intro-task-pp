@@ -11,20 +11,6 @@ use yii\db\ActiveRecord;
  */
 class Order extends ActiveRecord
 {
-
-    private const MODES = [
-        0 => 'Manual',
-        1 => 'Auto',
-    ];
-
-    private const STATUSES = [
-        0 => 'pending',
-        1 => 'inprogress',
-        2 => 'completed',
-        3 => 'canceled',
-        4 => 'error',
-    ];
-
     /**
      * @inheritdoc
      */
@@ -32,8 +18,8 @@ class Order extends ActiveRecord
     {
         return [
             [['status', 'service_id', 'mode'], 'safe'],
-            ['status', 'in', 'range' => array_keys(self::STATUSES)],
-            ['mode', 'in', 'range' => array_keys(self::MODES)],
+            ['status', 'in', 'range' => array_keys(Status::STATUSES)],
+            ['mode', 'in', 'range' => array_keys(Mode::MODES)],
             ['service_id', 'integer'],
         ];
     }
@@ -74,12 +60,7 @@ class Order extends ActiveRecord
     public function getMode(): string
     {
         $modeValue = $this->getAttribute('mode');
-
-        if (isset(self::MODES[$modeValue])) {
-            return Yii::t('app', self::MODES[$modeValue]);
-        }
-
-        return '';
+        return Mode::getModeLabel($modeValue);
     }
 
     /**
@@ -90,11 +71,7 @@ class Order extends ActiveRecord
     public function getStatus(): string
     {
         $statusValue = $this->getAttribute('status');
-        if (isset(self::STATUSES[$statusValue])) {
-            return self::STATUSES[$statusValue];
-        }
-
-        return '';
+        return Status::getStatusLabel($statusValue);
     }
 
     /**
@@ -104,7 +81,7 @@ class Order extends ActiveRecord
      */
     public function getStatuses(): array
     {
-        return self::STATUSES;
+        return Status::getStatuses();
     }
 
     /**
@@ -114,9 +91,7 @@ class Order extends ActiveRecord
      */
     public function getModes(): array
     {
-        return array_map(function ($value) {
-            return Yii::t('app', $value);
-        }, self::MODES);
+        return Mode::getModes();
     }
 
 }

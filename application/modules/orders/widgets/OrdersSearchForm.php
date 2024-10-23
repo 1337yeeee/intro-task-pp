@@ -15,8 +15,6 @@ class OrdersSearchForm extends Widget
     private static $searchModel;
     private static $currentStatus;
 
-    public const TEXT_INPUT_PLACEHOLDER = 'Search orders';
-
     public static function widget($config = [])
     {
         self::$searchModel = $config['searchModel'];
@@ -57,7 +55,7 @@ class OrdersSearchForm extends Widget
 
         echo '<div class="input-group">';
 
-        echo Html::textInput('search', self::$searchModel->search, ['class' => 'form-control', 'placeholder' => Yii::t('app', self::TEXT_INPUT_PLACEHOLDER)]);
+        echo Html::textInput('search', self::$searchModel->search, ['class' => 'form-control', 'placeholder' => self::$searchModel->getInputPlaceHolder()]);
 
         echo '<span class="input-group-btn search-select-wrap">';
 
