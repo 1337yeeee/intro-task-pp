@@ -86,18 +86,19 @@ class OrderSearch extends Order
     public function search(array $params, Pagination $pagination): ActiveDataProvider
     {
         $query = $this->buildQuery()
-            ->orderBy(['id' => SORT_DESC])
-            ->limit($pagination->getLimit())
-            ->offset($pagination->getOffset());
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => $pagination,
-        ]);
+            ->orderBy(['id' => SORT_DESC]);
 
         $this->applyFiltersIfValid($params, $query);
 
-        return $dataProvider;
+        $pagination->totalCount = $query->count();
+
+        $query->limit($pagination->getLimit())
+            ->offset($pagination->getOffset());
+
+        return new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => $pagination,
+        ]);
     }
 
     /**
@@ -117,21 +118,6 @@ class OrderSearch extends Order
         $this->applyFiltersIfValid($params, $query, ['service_id']);
 
         return $query->asArray()->all();
-    }
-
-    /**
-     * Get count of filtered orders
-     *
-     * @param array $params
-     * @return bool|int|string|null
-     */
-    public function getCount(array $params)
-    {
-        $query = $this->buildQueryJoin();
-
-        $this->applyFiltersIfValid($params, $query);
-
-        return $query->count();
     }
 
     /**
@@ -215,18 +201,6 @@ class OrderSearch extends Order
         return self::find()
             ->joinWith('service')
             ->joinWith('user');
-    }
-
-    /**
-     * Builds the basic query and joins tables
-     *
-     * @return ActiveQuery
-     */
-    private function buildQueryJoin(): ActiveQuery
-    {
-        $query = self::find();
-        $this->joinAll($query);
-        return $query;
     }
 
     /**

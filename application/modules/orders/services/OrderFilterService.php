@@ -28,9 +28,6 @@ class OrderFilterService
     {
         $searchModel = new OrderSearch();
 
-        $totalCount = $searchModel->getCount($params);
-        $pagination->totalCount = $totalCount;
-
         $ordersDataProvider = $searchModel->search($params, $pagination);
         $servicesList = $searchModel->getServicesOfOrders($params);
 

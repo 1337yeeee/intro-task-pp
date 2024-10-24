@@ -41,7 +41,7 @@ class OrderPaginationService
         $page = intval($this->request->get('page', $this->defaultPage));
 
         return new Pagination([
-            'totalCount' => 0, // Controller will set this value
+            'totalCount' => 0, // Model will set this value
             'pageSize' => $perPage,
             'page' => $page - 1,
             'route' => $this->route
