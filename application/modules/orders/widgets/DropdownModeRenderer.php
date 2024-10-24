@@ -3,9 +3,8 @@
 namespace orders\widgets;
 
 use orders\helpers\OrderLabels;
-use orders\helpers\UrlHelper;
 use orders\models\OrderSearch;
-use Yii;
+use yii\helpers\Url;
 
 /**
  * Renders drop down list of available modes
@@ -35,7 +34,7 @@ class DropdownModeRenderer
 
         foreach ($modes as $key => $mode) {
             $active = $currentMode === $key ? 'active' : '';
-            $href = UrlHelper::createUrlWithParam('mode', $key);
+            $href = Url::current(['mode' => $key]);
             $html .= <<<HTML
             <li class="{$active}">
                 <a href="{$href}">{$mode}</a>

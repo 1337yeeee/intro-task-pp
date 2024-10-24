@@ -3,9 +3,8 @@
 namespace orders\widgets;
 
 use orders\helpers\OrderLabels;
-use orders\helpers\UrlHelper;
 use orders\models\Service;
-use Yii;
+use yii\helpers\Url;
 
 /**
  * Renders drop down list of available services
@@ -36,7 +35,7 @@ class DropdownServiceRenderer
         $rows = '';
         foreach ($servicesList as $service) {
             $active = $currentServiceId === (string)$service['id'] ? 'active' : '';
-            $url = UrlHelper::createUrlWithParam('service_id', (string)$service['id']);
+            $url = Url::current(['service_id' => $service['id']]);
             if ($service['name']) {
                 $rows .= '<li><a ' . $active . ' href="' . $url . '"><span class="label-id">' . $service['order_count'] . '</span> ' . $service['name'] . '</a></li>';
             } else {
