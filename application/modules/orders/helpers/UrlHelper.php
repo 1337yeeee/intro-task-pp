@@ -17,7 +17,7 @@ class UrlHelper
      * @param $value mixed value of the parameter
      * @return string
      */
-    public static function createUrlWithParam($param, $value): string
+    public static function createUrlWithParam(string $param, $value): string
     {
         $params = Yii::$app->request->getQueryParams();
 
@@ -37,5 +37,31 @@ class UrlHelper
         }
 
         return Url::to(array_merge(['/orders'], $params));
+    }
+
+    /**
+     * Generates URL with the given status and saves search statement.
+     *
+     * @param string|null $status
+     * @return string
+     */
+    public static function getUrlWithStatusAndSearchOnly(?string $status = null): string
+    {
+        $params = Yii::$app->request->queryParams;
+
+        $newParams = [];
+
+        if (isset($params['search'])) {
+            $newParams['search'] = $params['search'];
+        }
+        if (isset($params['search_type'])) {
+            $newParams['search_type'] = $params['search_type'];
+        }
+
+        if ($status) {
+            return Url::to(array_merge(['/orders/' . $status], $newParams));
+        } else {
+            return Url::to(array_merge(['/orders'], $newParams));
+        }
     }
 }

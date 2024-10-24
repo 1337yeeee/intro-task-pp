@@ -71,7 +71,7 @@ class Order extends ActiveRecord
     public function getStatus(): string
     {
         $statusValue = $this->getAttribute('status');
-        return Status::getStatusLabel($statusValue);
+        return Status::getStatus($statusValue);
     }
 
     /**

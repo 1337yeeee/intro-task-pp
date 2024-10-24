@@ -3,7 +3,6 @@
 namespace orders\widgets;
 
 use orders\models\OrderSearch;
-use Yii;
 use yii\base\Widget;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -14,7 +13,6 @@ use yii\widgets\ActiveForm;
 class OrdersSearchForm extends Widget
 {
     private static OrderSearch $searchModel;
-    private static string $currentStatus;
 
     /**
      * @inheritDoc
@@ -22,9 +20,7 @@ class OrdersSearchForm extends Widget
     public static function widget($config = []): string
     {
         self::$searchModel = $config['searchModel'];
-        self::$currentStatus = $config['currentStatus'];
         unset($config['searchModel']);
-        unset($config['currentStatus']);
         return parent::widget($config);
 
     }
@@ -46,7 +42,8 @@ class OrdersSearchForm extends Widget
      */
     private function renderForm()
     {
-        $status = self::$currentStatus;
+        $status = self::$searchModel->getStatus();
+
         if ($status) {
             $status = '/' . $status;
         }

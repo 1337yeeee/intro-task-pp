@@ -2,6 +2,7 @@
 
 namespace orders\widgets;
 
+use orders\helpers\UrlHelper;
 use orders\models\OrderSearch;
 use orders\models\Status;
 use Yii;
@@ -23,7 +24,6 @@ class OrdersNavigation extends Widget
     {
         return $this->render('ordersNavigation', [
             'statuses' => Status::getStatusesWithKeys(),
-            'currentStatus' => Yii::$app->request->get('status', ''),
             'searchModel' => $this->searchModel,
         ]);
     }
@@ -36,21 +36,6 @@ class OrdersNavigation extends Widget
      */
     public function getUrl(?string $status = null): string
     {
-        $params = Yii::$app->request->queryParams;
-
-        $newParams = [];
-
-        if (isset($params['search'])) {
-            $newParams['search'] = $params['search'];
-        }
-        if (isset($params['search_type'])) {
-            $newParams['search_type'] = $params['search_type'];
-        }
-
-        if ($status) {
-            return Url::to(array_merge(['/orders/' . $status], $newParams));
-        } else {
-            return Url::to(array_merge(['/orders'], $newParams));
-        }
+        return UrlHelper::getUrlWithStatusAndSearchOnly($status);
     }
 }

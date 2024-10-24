@@ -34,6 +34,17 @@ class Status
     }
 
     /**
+     * Return status as in params
+     *
+     * @param int|null $key
+     * @return string
+     */
+    public static function getStatus(?int $key): string
+    {
+        return self::STATUSES[$key] ?? '';
+    }
+
+    /**
      * Returns status label by status key.
      *
      * @param int $key
