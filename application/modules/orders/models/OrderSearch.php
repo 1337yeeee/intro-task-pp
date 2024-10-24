@@ -38,13 +38,6 @@ class OrderSearch extends Order
     public const SEARCH_TYPE_USERNAME_LABEL = 'Username';
     public const TEXT_INPUT_PLACEHOLDER = 'Search orders';
 
-    public const ID_LABEL = 'ID';
-    public const USER_LABEL = 'User';
-    public const LINK_LABEL = 'Link';
-    public const QUANTITY_LABEL = 'Quantity';
-    public const STATUS_LABEL = 'Status';
-    public const CREATED_AT_LABEL = 'Created';
-
     /**
      * @inheritdoc
      */
