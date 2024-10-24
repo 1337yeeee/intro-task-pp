@@ -4,8 +4,7 @@ namespace orders\widgets;
 
 use orders\models\OrderSearch;
 use yii\base\Widget;
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 /**
  * Widget for search form
@@ -30,13 +29,10 @@ class OrdersSearchForm extends Widget
      */
     public function run()
     {
-        $status = self::$searchModel->getStatus();
+        $action = Url::to(['', 'status' => self::$searchModel->getStatus()]);
 
-        if ($status) {
-            $status = '/' . $status;
-        }
         return $this->render('ordersSearchForm', [
-            'status' => $status,
+            'action' => $action,
             'searchModel' => self::$searchModel,
         ]);
     }

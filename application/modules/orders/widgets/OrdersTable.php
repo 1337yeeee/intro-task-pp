@@ -4,9 +4,7 @@ namespace orders\widgets;
 
 use orders\helpers\OrderLabels;
 use orders\models\OrderSearch;
-use Yii;
 use yii\grid\GridView;
-use yii\helpers\Url;
 
 /**
  * Widget for displaying orders

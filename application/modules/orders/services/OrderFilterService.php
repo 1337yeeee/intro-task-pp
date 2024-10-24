@@ -12,12 +12,6 @@ use yii\data\Pagination;
 class OrderFilterService
 {
     /**
-     * Fields to be ignored by the filter
-     * @var array
-     */
-    private array $filtersIgnore = [];
-
-    /**
      * Prepares data for view with filtered orders and pagination
      *
      * @param array $params

@@ -3,7 +3,6 @@
 namespace orders\widgets;
 
 use orders\helpers\OrderLabels;
-use Yii;
 use yii\base\Widget;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace orders\models;
 
-use Yii;
 use yii\db\ActiveRecord;
 
 /**

@@ -9,7 +9,7 @@ use yii\db\QueryInterface;
  */
 class OrderFilter
 {
-    private $params;
+    private array $params;
     public $status;
     public $service_id;
     public $mode;

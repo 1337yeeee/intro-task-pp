@@ -2,7 +2,7 @@
 
 /** @var OrderSearch $searchModel */
 
-/** @var string $status */
+/** @var string $action */
 
 use orders\models\OrderSearch;
 use yii\helpers\Html;
@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 ?>
 
 <?php $form = ActiveForm::begin([
-    'action' => ['/orders' . $status],
+    'action' => [$action],
     'method' => 'get',
     'options' => ['class' => 'form-inline'],
 ]); ?>
