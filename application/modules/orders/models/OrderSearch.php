@@ -6,7 +6,9 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\data\Pagination;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\db\QueryInterface;
 
 /**
  * Decorator for Order model for applying filters
@@ -79,8 +81,7 @@ class OrderSearch extends Order
      */
     public function search(array $params, Pagination $pagination): ActiveDataProvider
     {
-        $query = self::find()
-            ->joinWith(['service', 'user'])
+        $query = $this->buildQuery()
             ->orderBy(['id' => SORT_DESC])
             ->limit($pagination->getLimit())
             ->offset($pagination->getOffset());
@@ -90,10 +91,7 @@ class OrderSearch extends Order
             'pagination' => $pagination,
         ]);
 
-        if ($this->load($params, '') and $this->validate()) {
-            $filter = new OrderFilter($this);
-            $filter->applyFilters($query);
-        }
+        $this->applyFiltersIfValid($params, $query);
 
         return $dataProvider;
     }
@@ -106,17 +104,13 @@ class OrderSearch extends Order
      */
     public function getServicesOfOrders(array $params): array
     {
-        $query = self::find()
-            ->joinWith('service')
+        $query = $this->buildQuery()
             ->select(['services.name', 'services.id', 'COUNT(orders.id) as order_count'])
             ->groupBy(new \yii\db\Expression('`services`.`name`, `services`.`id` WITH ROLLUP'))
             ->having('services.id IS NOT NULL OR services.name IS NULL')
             ->orderBy(['order_count' => SORT_DESC]);
 
-        if ($this->load($params, '') and $this->validate()) {
-            $filter = new OrderFilter($this, ['service_id']);
-            $filter->applyFilters($query);
-        }
+        $this->applyFiltersIfValid($params, $query, ['service_id']);
 
         return $query->asArray()->all();
     }
@@ -129,12 +123,9 @@ class OrderSearch extends Order
      */
     public function getCount(array $params)
     {
-        $query = self::find();
+        $query = $this->buildQueryJoin();
 
-        if ($this->load($params, '') and $this->validate()) {
-            $filter = new OrderFilter($this);
-            $filter->applyFilters($query);
-        }
+        $this->applyFiltersIfValid($params, $query);
 
         return $query->count();
     }
@@ -143,7 +134,7 @@ class OrderSearch extends Order
      * Iterate through orders applying batch size
      *
      * @param int $batchSize
-     * @param OrderFilter|null $filter
+     * @param array $params
      * @return \Generator
      */
     public function getRecentOrdersBatch(int $batchSize = 100, array $params = []): \Generator
@@ -155,15 +146,11 @@ class OrderSearch extends Order
                 'users.last_name', 'services.name service_name',
             ])
             ->from('orders')
-            ->join('LEFT JOIN', 'services', 'services.id = orders.service_id')
-            ->join('LEFT JOIN', 'users', 'users.id = orders.user_id')
             ->orderBy(['orders.id' => SORT_DESC]);
 
-        if ($this->load($params, '') and $this->validate()) {
-            $filter = new OrderFilter($this);
-            $filter->setDoJoin(false);
-            $filter->applyFilters($query);
-        }
+        $this->joinAll($query);
+
+        $this->applyFiltersIfValid($params, $query);
 
         foreach ($query->batch($batchSize) as $ordersBatch) {
             yield $ordersBatch;
@@ -201,4 +188,57 @@ class OrderSearch extends Order
     {
         return Yii::t('app', self::TEXT_INPUT_PLACEHOLDER);
     }
+
+    /**
+     * Joins Users and Services to the query
+     *
+     * @param QueryInterface $query
+     * @return void
+     */
+    private function joinAll(QueryInterface $query): void
+    {
+        $query->leftJoin('users', 'users.id = orders.user_id');
+        $query->leftJoin('services', 'services.id = orders.service_id');
+    }
+
+    /**
+     * Builds the basic query with joined relations
+     *
+     * @return ActiveQuery
+     */
+    private function buildQuery(): ActiveQuery
+    {
+        return self::find()
+            ->joinWith('service')
+            ->joinWith('user');
+    }
+
+    /**
+     * Builds the basic query and joins tables
+     *
+     * @return ActiveQuery
+     */
+    private function buildQueryJoin(): ActiveQuery
+    {
+        $query = self::find();
+        $this->joinAll($query);
+        return $query;
+    }
+
+    /**
+     * Loads params into the model, validates it, then, if valid, applies filters to query
+     *
+     * @param array $params
+     * @param QueryInterface $query
+     * @param array $ingoreFields
+     * @return void
+     */
+    private function applyFiltersIfValid(array $params, QueryInterface $query, array $ingoreFields = []): void
+    {
+        if ($this->load($params, '') && $this->validate()) {
+            $filter = new OrderFilter($this, $ingoreFields);
+            $filter->applyFilters($query);
+        }
+    }
+
 }

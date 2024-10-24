@@ -2,6 +2,8 @@
 
 namespace orders\models;
 
+use yii\db\QueryInterface;
+
 /**
  * Class for applying filters on query which works with orders
  */
@@ -13,7 +15,6 @@ class OrderFilter
     public $mode;
     public $search;
     public $search_type;
-    private bool $doJoin = true;
 
     public function __construct(OrderSearch $searchModel, array $ignore = [])
     {
@@ -28,23 +29,12 @@ class OrderFilter
     }
 
     /**
-     * If `false` tables won't be joined in `applyFilters` method
-     *
-     * @param bool $doJoin
-     * @return void
-     */
-    public function setDoJoin(bool $doJoin = true)
-    {
-        $this->doJoin = $doJoin;
-    }
-
-    /**
      * Applies filters on the query
      *
-     * @param $query
+     * @param QueryInterface $query
      * @return void
      */
-    public function applyFilters($query)
+    public function applyFilters(QueryInterface $query)
     {
         if ($this->status !== null) {
             $query->andWhere(['orders.status' => $this->status]);
@@ -63,15 +53,11 @@ class OrderFilter
     /**
      * Applies search filter if the parameters are set
      *
-     * @param $query
+     * @param QueryInterface $query
      * @return void
      */
-    protected function applySearch($query)
+    protected function applySearch(QueryInterface $query)
     {
-        if ($this->doJoin) {
-            $query->joinWith(['user', 'service']);
-        }
-
         $searchConditions = [];
         if ($this->search_type === '1') {
             $searchConditions[] = ['like', 'orders.link', $this->search];
