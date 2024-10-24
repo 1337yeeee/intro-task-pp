@@ -38,7 +38,7 @@ class OrderPaginationService
     public function getPagination(): Pagination
     {
         $perPage = $this->request->get('limit', $this->defaultLimit);
-        $page = $this->request->get('page', $this->defaultPage);
+        $page = intval($this->request->get('page', $this->defaultPage));
 
         return new Pagination([
             'totalCount' => 0, // Controller will set this value

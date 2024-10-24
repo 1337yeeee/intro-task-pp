@@ -16,7 +16,6 @@ class OrderController extends Controller
 {
     private const DEFAULT_LIMIT = 100;
     private const DEFAULT_PAGE = 1;
-    private const INDEX_ROUTE = 'orders';
 
     /**
      * Display filtered orders.
@@ -26,7 +25,7 @@ class OrderController extends Controller
      */
     public function actionIndex(?string $status = null): string
     {
-        $route = self::INDEX_ROUTE . ($status ? '/' . $status : '');
+        $route = Url::to(['', 'status' => $status]);
         $paginationService = new OrderPaginationService(Yii::$app->request, self::DEFAULT_LIMIT, self::DEFAULT_PAGE, $route);
         $pagination = $paginationService->getPagination();
 
