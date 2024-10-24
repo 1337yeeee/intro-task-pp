@@ -12,7 +12,7 @@ class Service extends ActiveRecord
     /**
      * @inheritDoc
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'services';
     }

@@ -2,6 +2,7 @@
 
 namespace orders\widgets;
 
+use orders\models\OrderSearch;
 use orders\models\Status;
 use Yii;
 use yii\base\Widget;
@@ -13,7 +14,7 @@ use yii\helpers\Url;
 class OrdersNavigation extends Widget
 {
 
-    public $searchModel;
+    public OrderSearch $searchModel;
 
     /**
      * @inheritDoc
@@ -29,6 +30,9 @@ class OrdersNavigation extends Widget
 
     /**
      * Generates URL with the given status.
+     *
+     * @param string|null $status
+     * @return string
      */
     public function getUrl(?string $status = null): string
     {

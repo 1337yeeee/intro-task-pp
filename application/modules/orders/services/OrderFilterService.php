@@ -11,6 +11,10 @@ use yii\data\Pagination;
  */
 class OrderFilterService
 {
+    /**
+     * Fields to be ignored by the filter
+     * @var array
+     */
     private array $filtersIgnore = [];
 
     /**

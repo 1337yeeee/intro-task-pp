@@ -10,7 +10,8 @@ use yii\base\Widget;
  */
 class DownloadButton extends Widget
 {
-    public $exportPath;
+    /** @var string */
+    public string $exportPath;
     public const BUTTON_TEXT = 'Download';
 
     /**

@@ -31,10 +31,10 @@ class Mode
     /**
      * Returns translated mode by key
      *
-     * @param $key
+     * @param string $key
      * @return string
      */
-    public static function getModeLabel($key): string
+    public static function getModeLabel(string $key): string
     {
         return isset(self::MODES[$key]) ? Yii::t('app', self::MODES[$key]) : '';
     }

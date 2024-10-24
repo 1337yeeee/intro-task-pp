@@ -3,6 +3,7 @@
 namespace orders\widgets;
 
 use orders\helpers\OrderLabels;
+use orders\models\OrderSearch;
 use Yii;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -13,7 +14,7 @@ use yii\helpers\Url;
 class OrdersTable extends GridView
 {
 
-    private static $searchModel;
+    private static OrderSearch $searchModel;
 
     /**
      * @inheritDoc
@@ -44,10 +45,10 @@ class OrdersTable extends GridView
     /**
      * Returns an array for 'columns' GridView parameter
      *
-     * @param $servicesList
+     * @param array $servicesList
      * @return array[]
      */
-    private static function getColumns($servicesList): array
+    private static function getColumns(array $servicesList): array
     {
         return [
             [

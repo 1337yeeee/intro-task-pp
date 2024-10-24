@@ -4,6 +4,7 @@ namespace orders\widgets;
 
 use orders\helpers\OrderLabels;
 use orders\helpers\UrlHelper;
+use orders\models\OrderSearch;
 use Yii;
 
 /**
@@ -17,11 +18,11 @@ class DropdownModeRenderer
     /**
      * Renders drop down list of available modes
      *
-     * @param $searchModel
-     * @param $currentMode
+     * @param OrderSearch $searchModel
+     * @param string $currentMode
      * @return string
      */
-    public static function render($searchModel, $currentMode): string
+    public static function render(OrderSearch $searchModel, string $currentMode): string
     {
         $html = '<div class="dropdown">
                 <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">

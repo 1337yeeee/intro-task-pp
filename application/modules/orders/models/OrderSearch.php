@@ -15,8 +15,19 @@ use yii\db\QueryInterface;
  */
 class OrderSearch extends Order
 {
+    /**
+     * @var string
+     */
     public $search = '';
+
+    /**
+     * @var int
+     */
     public $search_type = 0;
+
+    /**
+     * @var int
+     */
     public $page;
 
     public const SEARCH_TYPE_ID = 0;

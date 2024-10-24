@@ -2,6 +2,7 @@
 
 namespace orders\widgets;
 
+use orders\models\OrderSearch;
 use Yii;
 use yii\base\Widget;
 use yii\helpers\Html;
@@ -12,10 +13,13 @@ use yii\widgets\ActiveForm;
  */
 class OrdersSearchForm extends Widget
 {
-    private static $searchModel;
-    private static $currentStatus;
+    private static OrderSearch $searchModel;
+    private static string $currentStatus;
 
-    public static function widget($config = [])
+    /**
+     * @inheritDoc
+     */
+    public static function widget($config = []): string
     {
         self::$searchModel = $config['searchModel'];
         self::$currentStatus = $config['currentStatus'];

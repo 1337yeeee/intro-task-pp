@@ -10,10 +10,17 @@ use yii\web\Request;
  */
 class OrderPaginationService
 {
-    private $request;
-    private $defaultLimit;
-    private $defaultPage;
-    private $route;
+    /** @var Request */
+    private Request $request;
+
+    /** @var int */
+    private int $defaultLimit;
+
+    /** @var int */
+    private int $defaultPage;
+
+    /** @var string */
+    private string $route;
 
     public function __construct(Request $request, int $defaultLimit, int $defaultPage, string $route)
     {
@@ -34,7 +41,7 @@ class OrderPaginationService
         $page = $this->request->get('page', $this->defaultPage);
 
         return new Pagination([
-            'totalCount' => 0, // Filter will set this value
+            'totalCount' => 0, // Controller will set this value
             'pageSize' => $perPage,
             'page' => $page - 1,
             'route' => $this->route

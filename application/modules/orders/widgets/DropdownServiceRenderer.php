@@ -19,11 +19,11 @@ class DropdownServiceRenderer
     /**
      * Renders drop down list of available services
      *
-     * @param $servicesList
-     * @param $currentServiceId
+     * @param array $servicesList
+     * @param string $currentServiceId
      * @return string
      */
-    public static function render($servicesList, $currentServiceId): string
+    public static function render(array $servicesList, string $currentServiceId): string
     {
         $dropdownHtml = '<div class="dropdown">
             <button class="btn btn-th btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
