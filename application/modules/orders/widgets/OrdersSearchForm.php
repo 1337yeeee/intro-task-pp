@@ -30,42 +30,14 @@ class OrdersSearchForm extends Widget
      */
     public function run()
     {
-        ob_start();
-        $this->renderForm();
-        return ob_get_clean();
-    }
-
-    /**
-     * Renders the form with input fields
-     *
-     * @return void
-     */
-    private function renderForm()
-    {
         $status = self::$searchModel->getStatus();
 
         if ($status) {
             $status = '/' . $status;
         }
-
-        ActiveForm::begin([
-            'action' => ['/orders' . $status],
-            'method' => 'get',
-            'options' => ['class' => 'form-inline'],
+        return $this->render('ordersSearchForm', [
+            'status' => $status,
+            'searchModel' => self::$searchModel,
         ]);
-
-        echo '<div class="input-group">';
-
-        echo Html::textInput('search', self::$searchModel->search, ['class' => 'form-control', 'placeholder' => self::$searchModel->getInputPlaceHolder()]);
-
-        echo '<span class="input-group-btn search-select-wrap">';
-
-        echo Html::dropDownList('search_type', self::$searchModel->search_type, self::$searchModel->getSearchTypes(), ['class' => 'form-control search-select']);
-
-        echo Html::submitButton('<span class="glyphicon glyphicon-search"></span>', ['class' => 'btn btn-default']);
-
-        echo '</span></div>';
-
-        ActiveForm::end();
     }
 }
