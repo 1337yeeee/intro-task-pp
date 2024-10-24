@@ -16,6 +16,9 @@ class OrderFilter
     public $search;
     public $search_type;
 
+    public const LINK_SEARCH_TYPE = '1';
+    public const USER_SEARCH_TYPE = '2';
+
     public function __construct(OrderSearch $searchModel, array $ignore = [])
     {
         $params = [];
@@ -59,9 +62,9 @@ class OrderFilter
     protected function applySearch(QueryInterface $query)
     {
         $searchConditions = [];
-        if ($this->search_type === '1') {
+        if ($this->search_type === self::LINK_SEARCH_TYPE) {
             $searchConditions[] = ['like', 'orders.link', $this->search];
-        } elseif ($this->search_type === '2') {
+        } elseif ($this->search_type === self::USER_SEARCH_TYPE) {
             $searchConditions[] = ['like', 'users.first_name', $this->search];
             $searchConditions[] = ['like', 'users.last_name', $this->search];
         } else {
