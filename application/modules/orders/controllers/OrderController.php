@@ -16,7 +16,6 @@ class OrderController extends Controller
 {
     private const DEFAULT_LIMIT = 100;
     private const DEFAULT_PAGE = 1;
-    private const DEFAULT_ROUTE = 'index';
     private const INDEX_ROUTE = 'orders';
 
     /**
